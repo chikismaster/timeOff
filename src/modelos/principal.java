@@ -1,16 +1,30 @@
 package modelos;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import javax.swing.JInternalFrame;
+
 public class principal extends javax.swing.JFrame {
 
     public principal() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
     }
+    
+    void  CentrarVentana(JInternalFrame frame){
+        VentanaPrincipal.add(frame);
+        Dimension dimension=VentanaPrincipal.getSize();
+        Dimension Dframe=frame.getSize();
+        frame.setLocation((dimension.width -Dframe.width)/2,(dimension.height-Dframe.height)/2);
+        frame.show();
+        
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        VentanaPrincipal = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menu = new javax.swing.JMenu();
         btn_ayuda = new javax.swing.JMenuItem();
@@ -25,6 +39,17 @@ public class principal extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        javax.swing.GroupLayout VentanaPrincipalLayout = new javax.swing.GroupLayout(VentanaPrincipal);
+        VentanaPrincipal.setLayout(VentanaPrincipalLayout);
+        VentanaPrincipalLayout.setHorizontalGroup(
+            VentanaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 573, Short.MAX_VALUE)
+        );
+        VentanaPrincipalLayout.setVerticalGroup(
+            VentanaPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 412, Short.MAX_VALUE)
+        );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 102, 255));
         jMenuBar1.setForeground(new java.awt.Color(0, 51, 255));
@@ -107,11 +132,11 @@ public class principal extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 573, Short.MAX_VALUE)
+            .addComponent(VentanaPrincipal)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 412, Short.MAX_VALUE)
+            .addComponent(VentanaPrincipal)
         );
 
         pack();
@@ -139,7 +164,8 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_add_productoActionPerformed
 
     private void add_vendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_vendedorActionPerformed
-        
+        vendedor ven = new vendedor();
+        CentrarVentana(ven);
     }//GEN-LAST:event_add_vendedorActionPerformed
 
     /**
@@ -178,6 +204,7 @@ public class principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JDesktopPane VentanaPrincipal;
     private javax.swing.JMenu add;
     private javax.swing.JMenuItem add_cliente;
     private javax.swing.JMenuItem add_producto;
