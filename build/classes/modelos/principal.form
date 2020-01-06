@@ -47,7 +47,7 @@
         <Menu class="javax.swing.JMenu" name="ventas">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/imagenes/sapo3.png"/>
+              <Image iconType="3" name="/imagenes/venta.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Ventas"/>
           </Properties>
@@ -67,11 +67,17 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="add">
           <Properties>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/imagenes/add.png"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="A&#xf1;adir "/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="add_cliente">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/imagenes/prod.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Cliente"/>
               </Properties>
               <Events>
@@ -80,6 +86,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="add_producto">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/imagenes/client.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Producto"/>
               </Properties>
               <Events>
@@ -88,6 +97,9 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="add_vendedor">
               <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/imagenes/vende.png"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Vendedor"/>
               </Properties>
               <Events>
