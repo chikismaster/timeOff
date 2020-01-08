@@ -77,7 +77,7 @@ public class principal extends javax.swing.JFrame {
 
         jMenuBar1.add(menu);
 
-        ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/sapo3.png"))); // NOI18N
+        ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/venta.png"))); // NOI18N
         ventas.setText("Ventas");
 
         genera_ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticket.png"))); // NOI18N
@@ -91,8 +91,10 @@ public class principal extends javax.swing.JFrame {
 
         jMenuBar1.add(ventas);
 
+        add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add.png"))); // NOI18N
         add.setText("Añadir ");
 
+        add_cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prod.png"))); // NOI18N
         add_cliente.setText("Cliente");
         add_cliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,6 +103,7 @@ public class principal extends javax.swing.JFrame {
         });
         add.add(add_cliente);
 
+        add_producto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/client.png"))); // NOI18N
         add_producto.setText("Producto");
         add_producto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,6 +112,7 @@ public class principal extends javax.swing.JFrame {
         });
         add.add(add_producto);
 
+        add_vendedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/vende.png"))); // NOI18N
         add_vendedor.setText("Vendedor");
         add_vendedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
