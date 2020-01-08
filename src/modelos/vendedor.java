@@ -5,6 +5,8 @@ import conexion.conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -39,8 +41,7 @@ public class vendedor extends javax.swing.JInternalFrame {
     }
     
     
-    private DefaultTableModel getDatos(){
-        
+    private DefaultTableModel getDatos(){  
         try {
             setTitutlos();
             ps = con.getConnection().prepareStatement(SQL_select);
@@ -343,10 +344,14 @@ public class vendedor extends javax.swing.JInternalFrame {
         int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
         //agregar datos
         String dni = txtDni.getText().toString();
+        String nom = txtNombres.getText().toString();
+        String tel = txtTelefono.getText().toString();
+        String estado = comboEstado.getSelectedItem().toString();
+        String usu = txtusuario.getText().toString();
         
 
         //consulta sql
-        String SQL_UPDATE = "UPDATE vendedor SET Dni='"+dni+"' WHERE IdVendedor="+id+"";
+        String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+id+"";
         //ejecutar consulta
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
@@ -354,16 +359,33 @@ public class vendedor extends javax.swing.JInternalFrame {
             //metodos para que se refresque la tabla
             LimpiarTabla();
             jTable1.setModel(getDatos2());
-            
         } catch (SQLException e) {
             System.out.println("no sirve la actualizar");
         }
-        
+        limpia_crud();
         
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        //seleccionar id de la tabla
+        int fila = jTable1.getSelectedRow();
+        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
+        //agregar datos
+        String dni = txtDni.getText().toString();
         
+        
+        String SQL_DELETE = "DELETE FROM vendedor WHERE IdVendedor ="+id+"";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_DELETE);
+            ps.execute();
+            //metodos para que se refresque la tabla
+            LimpiarTabla();
+            jTable1.setModel(getDatos2());
+        } catch (SQLException ex) {
+            System.out.println("no elimina vendedor");
+        }
+        limpia_crud();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
