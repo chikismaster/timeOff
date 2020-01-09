@@ -103,6 +103,16 @@ public class vendedor extends javax.swing.JInternalFrame {
         txtusuario.setText("");
     }
     
+    public void reiniciar_id(){
+        String reiniciarid = "ALTER TABLE vendedor AUTO_INCREMENT = 1";
+        try {
+            ps = con.getConnection().prepareStatement(reiniciarid);
+            ps.execute();
+        } catch (SQLException ex) {
+            System.out.println("no jalo el REINICIAR ID");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -386,6 +396,7 @@ public class vendedor extends javax.swing.JInternalFrame {
             System.out.println("no elimina vendedor");
         }
         limpia_crud();
+        reiniciar_id();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
