@@ -329,23 +329,30 @@ public class vendedor extends javax.swing.JInternalFrame {
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
         
-        String SQL_INSERT = "INSERT INTO vendedor (Dni,Nombres,Telefono,Estado,User) values('"+dn+"','"+nom+"','"+tel+"','"+estado+"','"+usu+"')";
+        System.out.println(usu);
         
-        try {
-            ps = con.getConnection().prepareStatement(SQL_INSERT);
-            int res = ps.executeUpdate();
-            if (res > 0) {
-                JOptionPane.showMessageDialog(null, "registro guardado");
-            }else{
-                JOptionPane.showMessageDialog(null, "NO loja");
+        if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+            JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
+        }else{
+        
+            String SQL_INSERT = "INSERT INTO vendedor (Dni,Nombres,Telefono,Estado,User) values('"+dn+"','"+nom+"','"+tel+"','"+estado+"','"+usu+"')";
+
+            try {
+                ps = con.getConnection().prepareStatement(SQL_INSERT);
+                int res = ps.executeUpdate();
+                if (res > 0) {
+                    JOptionPane.showMessageDialog(null, "registro guardado");
+                }else{
+                    JOptionPane.showMessageDialog(null, "NO GUARDO!!");
+                }
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos2());
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "ERROR (usuario registrado cambie de usuario)");
             }
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos2());
-        } catch (SQLException e) {
-            System.out.println("error compa "+e);
         }
-        
+        //limpia_crud();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
@@ -359,7 +366,6 @@ public class vendedor extends javax.swing.JInternalFrame {
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
         
-
         //consulta sql
         String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+id+"";
         //ejecutar consulta
@@ -372,7 +378,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         } catch (SQLException e) {
             System.out.println("no sirve la actualizar");
         }
-        limpia_crud();
+        
         
     }//GEN-LAST:event_btnModificarActionPerformed
 

@@ -160,7 +160,8 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_genera_ventasActionPerformed
 
     private void add_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_clienteActionPerformed
-        
+        Cliente cli = new Cliente();
+        CentrarVentana(cli);
     }//GEN-LAST:event_add_clienteActionPerformed
 
     private void add_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_productoActionPerformed
