@@ -82,19 +82,13 @@
                           <Component id="ok" min="-2" pref="88" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="83" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="txtNombre" min="-2" pref="181" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="txtcontra" min="-2" pref="181" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="txtNombre" alignment="1" min="-2" pref="181" max="-2" attributes="0"/>
+                          <Component id="txtcontra" alignment="1" min="-2" pref="181" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -173,9 +167,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="uno" min="-2" pref="82" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="dos" min="-2" pref="82" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
+                              <Component id="dos" min="-2" pref="82" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="tres" min="-2" pref="82" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
                           </Group>
@@ -211,28 +205,39 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="tres" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="dos" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="uno" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
+                              <Component id="tres" min="-2" pref="63" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="1" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="uno" alignment="1" min="-2" pref="63" max="-2" attributes="0"/>
+                                  <Component id="dos" alignment="1" min="-2" pref="63" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cuatro" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="cinco" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="seis" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="seis" min="-2" pref="63" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                              <Component id="cuatro" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                              <Component id="cinco" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="siete" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="ocho" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="nueve" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="nueve" min="-2" pref="63" max="-2" attributes="0"/>
+                          <Group type="103" alignment="1" groupAlignment="3" attributes="0">
+                              <Component id="siete" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                              <Component id="ocho" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cero" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
-                          <Component id="limpiar" alignment="3" min="-2" pref="63" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="limpiar" min="-2" pref="63" max="-2" attributes="0"/>
+                          <Component id="cero" min="-2" pref="63" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -242,6 +247,9 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="tres">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="3"/>
               </Properties>
               <Events>
@@ -250,6 +258,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="uno">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="1"/>
               </Properties>
               <Events>
@@ -258,6 +269,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="cuatro">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="4"/>
               </Properties>
               <Events>
@@ -266,6 +280,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="cinco">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="5"/>
               </Properties>
               <Events>
@@ -274,6 +291,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="seis">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="6"/>
               </Properties>
               <Events>
@@ -282,6 +302,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="dos">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="2"/>
               </Properties>
               <Events>
@@ -290,6 +313,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="siete">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="7"/>
               </Properties>
               <Events>
@@ -298,6 +324,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="ocho">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="8"/>
               </Properties>
               <Events>
@@ -306,6 +335,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="nueve">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="9"/>
               </Properties>
               <Events>
@@ -314,6 +346,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="cero">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="0"/>
               </Properties>
               <Events>
@@ -322,6 +357,9 @@
             </Component>
             <Component class="javax.swing.JButton" name="limpiar">
               <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Tahoma" size="24" style="0"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Limpiar"/>
               </Properties>
               <Events>

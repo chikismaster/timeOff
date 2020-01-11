@@ -52,7 +52,7 @@ public class principal extends javax.swing.JFrame {
         );
 
         jMenuBar1.setBackground(new java.awt.Color(0, 102, 255));
-        jMenuBar1.setForeground(new java.awt.Color(0, 51, 255));
+        jMenuBar1.setForeground(new java.awt.Color(51, 255, 255));
 
         menu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/menu2.png"))); // NOI18N
         menu.setText("Menu");
@@ -94,7 +94,7 @@ public class principal extends javax.swing.JFrame {
         add.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add.png"))); // NOI18N
         add.setText("Añadir ");
 
-        add_cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prod.png"))); // NOI18N
+        add_cliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/client.png"))); // NOI18N
         add_cliente.setText("Cliente");
         add_cliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -103,7 +103,7 @@ public class principal extends javax.swing.JFrame {
         });
         add.add(add_cliente);
 
-        add_producto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/client.png"))); // NOI18N
+        add_producto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/prod.png"))); // NOI18N
         add_producto.setText("Producto");
         add_producto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,7 +165,8 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_add_clienteActionPerformed
 
     private void add_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_productoActionPerformed
-        
+        Producto pro = new Producto();
+        CentrarVentana(pro);
     }//GEN-LAST:event_add_productoActionPerformed
 
     private void add_vendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_vendedorActionPerformed
