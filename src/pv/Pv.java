@@ -15,7 +15,7 @@ public class Pv {
       boolean chi = con.sijalo();
       
         if (chi) {
-            System.out.println("si jaloo bebe");
+            System.out.println("..");
             login lo = new login();
             lo.setVisible(true);
         }else{

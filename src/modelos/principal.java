@@ -67,7 +67,7 @@ public class principal extends javax.swing.JFrame {
         menu.add(btn_ayuda);
 
         btn_salir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/closed.png"))); // NOI18N
-        btn_salir.setText("Salir");
+        btn_salir.setText("Cerrar sesion");
         btn_salir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_salirActionPerformed(evt);
@@ -152,11 +152,15 @@ public class principal extends javax.swing.JFrame {
 
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
         //salir
-        System.exit(0);
+        //System.exit(0);
+        login log=new login();
+        log.setVisible(true);
+        dispose();
     }//GEN-LAST:event_btn_salirActionPerformed
 
     private void genera_ventasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genera_ventasActionPerformed
-        
+        venta vv = new venta();
+        CentrarVentana(vv);
     }//GEN-LAST:event_genera_ventasActionPerformed
 
     private void add_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_clienteActionPerformed

@@ -23,7 +23,7 @@ public class conexion {
             Class.forName(driver);
             conn = DriverManager.getConnection(url, user, password);
             if(conn != null){
-                System.out.println("conexion jalando");
+                System.out.println(".");
                 cam = true;
             }
         } catch (ClassNotFoundException | SQLException e) {
