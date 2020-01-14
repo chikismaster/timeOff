@@ -30,9 +30,18 @@ public class venta extends javax.swing.JInternalFrame {
         
         return DT;
     }
-    private DefaultTableModel getDatos(String usu){
+    private DefaultTableModel getDatos(String usu, String dni){
+        String p = "";
+        String o = "";
         
-        String SQL_SELECT = "SELECT * FROM cliente WHERE Nombres='"+usu+"'";
+        if (!usu.equals("")) {
+            p = "%";
+        }
+        if (!dni.equals("")) {
+            o = "%";
+        }
+        
+        String SQL_SELECT = "SELECT * FROM cliente WHERE Nombres LIKE '"+usu+p+"' OR Dni LIKE '"+dni+o+"'";
         try {
             setTitutlos();
             ps = con.getConnection().prepareStatement(SQL_SELECT);
@@ -209,8 +218,6 @@ public class venta extends javax.swing.JInternalFrame {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel6.setText("COD: CLIENTE :");
-
-        txtCodCliente.setEditable(false);
 
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
         btnBuscarCliente.setText("Buscar");
@@ -456,9 +463,11 @@ public class venta extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        LimpiarTabla();
         String cliente = txtCliente.getText().toString();
-        jTable1.setModel(getDatos(cliente));
-        txtCodCliente.setText("");
+        String dni = txtCodCliente.getText().toString();
+        jTable1.setModel(getDatos(cliente, dni));
+        //txtCodCliente.setText("");
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
