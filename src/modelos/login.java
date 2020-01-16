@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class login extends javax.swing.JFrame {
     
+    public static String a;
+    public static int dd;
     //conexion con = new conexion();
     private PreparedStatement ps;
     private conexion con = new conexion();
@@ -335,7 +337,9 @@ public class login extends javax.swing.JFrame {
         String dni = txtcontra.getText().toString();
         String res_nom = null;
         
-        String SQL_select = "SELECT Nombres FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"'";
+        a = txtNombre.getText().toString();
+        
+        String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"'";
         try {
             ps = con.getConnection().prepareStatement(SQL_select);
             RS = ps.executeQuery();
@@ -343,6 +347,7 @@ public class login extends javax.swing.JFrame {
             while(RS.next()){
               //txtNombre.setText(RS.getString(1));
               res_nom = RS.getString(1);
+              dd = RS.getInt(2);
             }
             if (res_nom != null) {
                 //t1.setText(res_nom);
@@ -355,8 +360,6 @@ public class login extends javax.swing.JFrame {
             System.out.println("no se encotro");
         }
         
-        
-
     }//GEN-LAST:event_okActionPerformed
 
     private void sieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sieteActionPerformed

@@ -4,6 +4,9 @@ import conexion.conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -108,12 +111,13 @@ public class venta extends javax.swing.JInternalFrame {
         }
         DT.setColumnCount(0);
     }
+    /*
     void LimpiarColumn() {
         for (int i = 0; i < jTable1.getColumnCount(); i++) {
             jTable1.removeColumn(jTable1.getColumnModel().getColumn(i));
             i = i - 1;
         }
-    }
+    }*/
     
 
     @SuppressWarnings("unchecked")
@@ -471,6 +475,25 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        LimpiarTabla();
+        String cod_pro = txtCodProd.getText().toString();
+        
+        String SQL_select = "SELECT * FROM `producto` WHERE Codigo_product = '"+cod_pro+"'";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            
+            while (RS.next()) {                
+                txtProducto.setText(RS.getString(2));
+                txtPrecio.setText(RS.getString(4));
+                txtStock.setText(RS.getString(5));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Producto No registrado");
+        }
+        
+        txtVendedor.setText(login.a);
         
     }//GEN-LAST:event_jButton2ActionPerformed
 
