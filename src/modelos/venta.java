@@ -22,7 +22,31 @@ public class venta extends javax.swing.JInternalFrame {
     public venta() {
         ps = null;
         initComponents();
+        jTable1.setModel(getDatos2());
+        numserie();
     }
+    
+    public void numserie(){
+        int serie = 0;
+        String SQL_sel = "select max(NumeroSerie) from ventas";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_sel);
+            RS = ps.executeQuery();
+            
+            while (RS.next()) {                
+                serie = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println("no se puso numSerie");
+        }
+        
+        int res = serie+1;
+        String se = String.valueOf(res);
+        txtSerie.setText(se);
+  
+    }
+    
     private DefaultTableModel setTitutlos(){
         con = new conexion();
         DT.addColumn("IdCliente");
@@ -525,6 +549,7 @@ public class venta extends javax.swing.JInternalFrame {
             txtCliente.setText(nom);
             
         }else if(numcol == 7){
+            /*
             String idvent = jTable1.getValueAt(fila, 0).toString();
             String idcli = jTable1.getValueAt(fila, 1).toString();
             String idvend = jTable1.getValueAt(fila, 2).toString();
@@ -532,7 +557,7 @@ public class venta extends javax.swing.JInternalFrame {
             String fecvent = jTable1.getValueAt(fila, 4).toString();
             String monto = jTable1.getValueAt(fila, 5).toString();
             String estad = jTable1.getValueAt(fila, 6).toString();
-            
+            */
             
         }
         //jTable1.setModel(getDatos2());

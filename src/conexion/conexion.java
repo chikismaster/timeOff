@@ -12,7 +12,7 @@ public class conexion {
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String user = "root";
     private static final String password = "";
-    private static final String url = "jdbc:mysql://localhost:3306/db_ventas";
+    private static final String url = "jdbc:mysql://localhost:3306/db_timeoff";
 
     public static boolean cam = false;
     
