@@ -4,49 +4,84 @@ import conexion.conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.print.DocFlavor;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 public class venta extends javax.swing.JInternalFrame {
-    
+    //variables para conexion db
     private PreparedStatement ps;
     private conexion con;
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
-    
+    //variables globales
+    private static int cant = 0;
+    private static int ns = 0;
 
     public venta() {
         ps = null;
         initComponents();
-        jTable1.setModel(getDatos2());
+        //inicializa tabla ventas
+        jTable1.setModel(getDatos3());
+        //inicializa metodo obtener numero serie
         numserie();
+        System.out.println(fechahoy());
+        //para obtener vendedor usuario
+        txtVendedor.setText(login.a);
     }
-    
+    //metodo para obtener numero de serie
     public void numserie(){
         int serie = 0;
+        String fecha = "";
         String SQL_sel = "select max(NumeroSerie) from ventas";
-        
         try {
             ps = con.getConnection().prepareStatement(SQL_sel);
             RS = ps.executeQuery();
             
             while (RS.next()) {                
                 serie = RS.getInt(1);
+               
             }
         } catch (SQLException ex) {
             System.out.println("no se puso numSerie");
-        }
-        
+        }        
         int res = serie+1;
+        ns = res;
         String se = String.valueOf(res);
         txtSerie.setText(se);
-  
+        
+    }
+    //funcion que devuelve la fecha de hoy en string
+    public String fechahoy(){
+        Date fecha = new Date();
+        
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = new GregorianCalendar();
+        
+        String dia = Integer.toString(c1.get(Calendar.DATE));
+        String mes = Integer.toString(c2.get(Calendar.MONTH));
+        int mm = Integer.parseInt(mes);
+        int nmes = mm +1;
+        String memes = String.valueOf(nmes);
+        if (nmes < 10) {
+            memes = "0"+memes;
+        }
+        String anio = Integer.toString(c1.get(Calendar.YEAR));
+        
+        String fechoy = anio+"-"+memes+"-"+dia;
+        
+        txtFecha.setText(fechoy);
+        return fechoy;
     }
     
+    //titulos tabla cliente y tabla clietes
     private DefaultTableModel setTitutlos(){
         con = new conexion();
         DT.addColumn("IdCliente");
@@ -88,6 +123,8 @@ public class venta extends javax.swing.JInternalFrame {
         }
       return DT;
     }
+    
+    //titulos tabla venta y tabla devuelve por folio o num serie
     private DefaultTableModel setTitutlos2(){
         con = new conexion();
         DT.addColumn("IdVentas");
@@ -106,7 +143,7 @@ public class venta extends javax.swing.JInternalFrame {
     }
     private DefaultTableModel getDatos2(){
         
-        String SQL_SELECT = "SELECT * FROM ventas";
+        String SQL_SELECT = "SELECT * FROM ventas WHERE NumeroSerie = "+ns+"";
         try {
             setTitutlos2();
             ps = con.getConnection().prepareStatement(SQL_SELECT);
@@ -128,6 +165,40 @@ public class venta extends javax.swing.JInternalFrame {
         }
       return DT;
     }
+    //tabla de detalle_ventas
+    private DefaultTableModel setTitutlos3(){
+        con = new conexion();
+        DT.addColumn("IdDetalleVentas");
+        DT.addColumn("IdVentas");
+        DT.addColumn("IdProducto");
+        DT.addColumn("Cantidad");
+        DT.addColumn("PrecioVenta");
+        return DT;
+    }
+    private DefaultTableModel getDatos3(){
+        
+        String SQL_SELECT = "SELECT * FROM detalle_ventas";
+        try {
+            setTitutlos2();
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            RS = ps.executeQuery();
+            Object[] fila = new Object[5];
+            while (RS.next()){
+                fila[0] = RS.getInt(1);
+                fila[1] = RS.getInt(2);
+                fila[2] = RS.getInt(3);
+                fila[3] = RS.getInt(4);
+                fila[4] = RS.getDouble(5);
+                DT.addRow(fila);
+            }
+            //System.out.println("si hizo el desmadre");
+        } catch (SQLException e) {
+            System.out.println("error de select");
+        }
+      return DT;
+    }
+    
+    //metodo limpiar tabla
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
             DT.removeRow(i);
@@ -142,7 +213,82 @@ public class venta extends javax.swing.JInternalFrame {
             i = i - 1;
         }
     }*/
+    //metodo para calcular precio
+    void calcular(){
+        if (cant != 0) {
+            int veces = (int) txtCantidad.getValue();
+            int r = veces*cant;
+            String res = String.valueOf(r);
+            txtPrecio.setText(res);
+        }
+    }
     
+    //metodo retorna id cliente
+    public int id_cli(String dni){
+        int baba = 0;
+        String SQL_select = "SELECT IdCliente FROM cliente WHERE Dni='"+dni+"'";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                baba = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Producto No registrado");
+        }
+        return baba;
+    }
+    
+    //metodo para obtener id vendedor
+    public int id_ven(){
+        String userven = txtVendedor.getText().toString();
+        String SQL_select = "SELECT * FROM `vendedor` WHERE User = '"+userven+"'";
+        int lolo = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                lolo = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Producto No registrado");
+        }
+        
+        return lolo;
+    }
+
+    //insertar a detalle de venta
+    public void in_deta_venta(){
+        String SQL_insert = "INSERT INTO `detalle_ventas` (IdVentas, IdProducto, Cantidad, PrecioVenta) VALUES ('56', '8', '1', '90');";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_insert);
+            ps.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no guardo en detalle_venta");
+        }
+    }
+    //insertar a venta
+    public void in_venta(){
+        //obtener idcliente
+        String cai = txtCodCliente.getText().toString();
+        int idc = id_cli(cai);
+        String ic = String.valueOf(idc);
+        if (cai.equals("") || idc==0) {
+            ic = null;
+        }
+        //obtener idvendedor
+        int idv = id_ven();
+        //insertar a ventas
+        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, Estado) VALUES ("+ic+", "+idv+", 2, '2020-01-08', 180.0, '1')";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_insert);
+            ps.execute();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no guardo en venta");
+        }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -489,7 +635,8 @@ public class venta extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //boton buscar cliente
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         LimpiarTabla();
         String cliente = txtCliente.getText().toString();
@@ -497,7 +644,8 @@ public class venta extends javax.swing.JInternalFrame {
         jTable1.setModel(getDatos(cliente, dni));
         //txtCodCliente.setText("");
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
-
+    
+    //boton buscar producto por codigo de barras
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         LimpiarTabla();
         String cod_pro = txtCodProd.getText().toString();
@@ -511,18 +659,23 @@ public class venta extends javax.swing.JInternalFrame {
             while (RS.next()) {                
                 txtProducto.setText(RS.getString(2));
                 txtPrecio.setText(RS.getString(4));
+                cant = Integer.parseInt(RS.getString(4));
                 txtStock.setText(RS.getString(5));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
         }
-        
-        txtVendedor.setText(login.a);
-        
+        txtCantidad.setValue(1);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    //boton agrega producto a ventas
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         LimpiarTabla();
+        //calcula el precio
+        calcular();
+        
+        in_venta();
+        
+        
         jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jButton3ActionPerformed
 
