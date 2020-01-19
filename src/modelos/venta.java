@@ -36,6 +36,17 @@ public class venta extends javax.swing.JInternalFrame {
         //para obtener vendedor usuario
         txtVendedor.setText(login.a);
     }
+    //metodo que reinicia el id de venta
+    public void reiniciar_id(){
+        String reiniciarid = "ALTER TABLE ventas AUTO_INCREMENT = 1";
+        try {
+            ps = con.getConnection().prepareStatement(reiniciarid);
+            ps.execute();
+        } catch (SQLException ex) {
+            System.out.println("no jalo el REINICIAR ID");
+        }
+    }
+    
     //metodo para obtener numero de serie
     public void numserie(){
         int serie = 0;
@@ -259,6 +270,8 @@ public class venta extends javax.swing.JInternalFrame {
 
     //insertar a detalle de venta
     public void in_deta_venta(){
+        //insertar idventas
+        
         String SQL_insert = "INSERT INTO `detalle_ventas` (IdVentas, IdProducto, Cantidad, PrecioVenta) VALUES ('56', '8', '1', '90');";
         
         try {
@@ -279,8 +292,14 @@ public class venta extends javax.swing.JInternalFrame {
         }
         //obtener idvendedor
         int idv = id_ven();
+        //insertar numero de serie
+        String nums = txtSerie.getText();
+        //insertar la fecha de hoy
+        String ffec = fechahoy();
+        //insertar la cantidad
+        double costo = Integer.parseInt(txtPrecio.getText().toString());
         //insertar a ventas
-        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, Estado) VALUES ("+ic+", "+idv+", 2, '2020-01-08', 180.0, '1')";
+        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, Estado) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", '1')";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
@@ -673,14 +692,14 @@ public class venta extends javax.swing.JInternalFrame {
         //calcula el precio
         calcular();
         
-        in_venta();
+        
         
         
         jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        
+        //in_venta();
 
     }//GEN-LAST:event_btnGenerarActionPerformed
 
