@@ -35,6 +35,8 @@ public class venta extends javax.swing.JInternalFrame {
         System.out.println(fechahoy());
         //para obtener vendedor usuario
         txtVendedor.setText(login.a);
+        //el total sea igual a cero
+        txtTotalPagar.setText("0");
     }
     //metodo que reinicia el id de venta
     public void reiniciar_id(){
@@ -217,13 +219,7 @@ public class venta extends javax.swing.JInternalFrame {
         }
         DT.setColumnCount(0);
     }
-    /*
-    void LimpiarColumn() {
-        for (int i = 0; i < jTable1.getColumnCount(); i++) {
-            jTable1.removeColumn(jTable1.getColumnModel().getColumn(i));
-            i = i - 1;
-        }
-    }*/
+    
     //metodo para calcular precio
     void calcular(){
         if (cant != 0) {
@@ -283,6 +279,8 @@ public class venta extends javax.swing.JInternalFrame {
     }
     //insertar a venta
     public void in_venta(){
+        //reiniciar id
+        reiniciar_id();
         //obtener idcliente
         String cai = txtCodCliente.getText().toString();
         int idc = id_cli(cai);
@@ -307,6 +305,35 @@ public class venta extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "no guardo en venta");
         }
+    }
+    //validar si existe ese folio
+    public int exis_fol(){
+        int sino = 0;
+        
+        String SQL_sell = "SELECT NumeroSerie FROM `ventas` WHERE NumeroSerie="+ns+"; ";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_sell);
+            RS = ps.executeQuery();
+            
+            while (RS.next()) {                
+                sino = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println("no se puso numSerie");
+        }
+        return sino;
+    }
+    
+    //total a pagar 
+    public void totalpagar(){
+        int pp = Integer.parseInt(txtPrecio.getText());
+        int tt = Integer.parseInt(txtTotalPagar.getText());
+        
+        int restot = tt+pp;
+        String rtot = String.valueOf(restot);
+        
+        txtTotalPagar.setText(rtot);
     }
 
     @SuppressWarnings("unchecked")
@@ -691,6 +718,13 @@ public class venta extends javax.swing.JInternalFrame {
         LimpiarTabla();
         //calcula el precio
         calcular();
+        //calamos si existe el folio de venta y si no para crearlo
+        System.out.println(exis_fol());
+        if (exis_fol() == 0) {
+            in_venta();
+            System.out.println("no existeee");
+        }
+        totalpagar();
         
         
         
