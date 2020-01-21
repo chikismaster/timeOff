@@ -1,6 +1,7 @@
 package modelos;
 
 import conexion.conexion;
+import java.awt.Dimension;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.print.DocFlavor;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -22,9 +24,10 @@ public class venta extends javax.swing.JInternalFrame {
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     //variables globales
-    private static int cant = 0;
+    private static double cant = 0;
     private static int ns = 0;
     private static int idventas = 0;
+    private static int band = 0;
 
     public venta() {
         ps = null;
@@ -39,6 +42,7 @@ public class venta extends javax.swing.JInternalFrame {
         //el total sea igual a cero
         txtTotalPagar.setText("0");
     }
+    
     //metodo que reinicia el id de venta
     public void reiniciar_id(){
         String reiniciarid = "ALTER TABLE ventas AUTO_INCREMENT = 1";
@@ -49,7 +53,7 @@ public class venta extends javax.swing.JInternalFrame {
             System.out.println("no jalo el REINICIAR ID");
         }
     }
-    //einicia el id  de detalle de ventas
+    //reinicia el id  de detalle de ventas
     public void reiniciar_id2(){
         String reiniciarid = "ALTER TABLE detalle_ventas AUTO_INCREMENT = 1";
         try {
@@ -104,7 +108,7 @@ public class venta extends javax.swing.JInternalFrame {
         return fechoy;
     }
     
-    //********************AQUI SON SOLO TABLAS************************************************
+    //********************AQUI SON SOLO TABLAS A MOSTRAR************************************************
     //titulos tabla cliente y tabla clietes
     private DefaultTableModel setTitutlos(){
         con = new conexion();
@@ -119,6 +123,7 @@ public class venta extends javax.swing.JInternalFrame {
     private DefaultTableModel getDatos(String usu, String dni){
         String p = "";
         String o = "";
+        band = 0;
         
         if (!usu.equals("")) {
             p = "%";
@@ -140,11 +145,13 @@ public class venta extends javax.swing.JInternalFrame {
                 fila[3] = RS.getString(4);
                 fila[4] = RS.getString(5);
                 DT.addRow(fila);
+                band = band+1;
             }
-            System.out.println("si hizo el desmadre");
+            //System.out.println("si hizo el desmadre");
         } catch (SQLException e) {
             System.out.println("error de select");
         }
+        
       return DT;
     }
     
@@ -193,26 +200,24 @@ public class venta extends javax.swing.JInternalFrame {
     private DefaultTableModel setTitutlos3(){
         con = new conexion();
         DT.addColumn("IdDetalleVentas");
-        DT.addColumn("IdVentas");
-        DT.addColumn("IdProducto");
+        DT.addColumn("producto");
         DT.addColumn("Cantidad");
         DT.addColumn("PrecioVenta");
         return DT;
     }
     private DefaultTableModel getDatos3(){
         
-        String SQL_SELECT = "SELECT * FROM detalle_ventas";
+        String SQL_SELECT = "SELECT dv.IdDetalleVentas, p.Nombres, dv.Cantidad, dv.PrecioVenta FROM detalle_ventas dv join producto p ON dv.IdProducto=p.IdProducto JOIN ventas v ON dv.IdVentas=v.IdVentas WHERE v.NumeroSerie="+ns+"";
         try {
-            setTitutlos2();
+            setTitutlos3();
             ps = con.getConnection().prepareStatement(SQL_SELECT);
             RS = ps.executeQuery();
-            Object[] fila = new Object[5];
+            Object[] fila = new Object[4];
             while (RS.next()){
                 fila[0] = RS.getInt(1);
-                fila[1] = RS.getInt(2);
+                fila[1] = RS.getString(2);
                 fila[2] = RS.getInt(3);
-                fila[3] = RS.getInt(4);
-                fila[4] = RS.getDouble(5);
+                fila[3] = RS.getDouble(4);
                 DT.addRow(fila);
             }
             //System.out.println("si hizo el desmadre");
@@ -236,7 +241,7 @@ public class venta extends javax.swing.JInternalFrame {
     void calcular(){
         if (cant != 0) {
             int veces = (int) txtCantidad.getValue();
-            int r = veces*cant;
+            double r = veces*cant;
             String res = String.valueOf(r);
             txtPrecio.setText(res);
         }
@@ -335,7 +340,7 @@ public class venta extends javax.swing.JInternalFrame {
         //insertar la fecha de hoy
         String ffec = fechahoy();
         //insertar la cantidad
-        double costo = Integer.parseInt(txtPrecio.getText().toString());
+        double costo = Double.parseDouble(txtPrecio.getText().toString());
         //insertar a ventas
         String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, Estado) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", '1')";
         
@@ -368,10 +373,9 @@ public class venta extends javax.swing.JInternalFrame {
     }
     
     
-    
     //total a pagar 
-    public int totalpagar(){
-        int totalfinal = 0;
+    public double totalpagar(){
+        double totalfinal = 0;
         
         String SQL_SUM = "SELECT SUM(PrecioVenta) FROM `detalle_ventas` WHERE IdVentas = "+idventas+"";
         
@@ -379,14 +383,47 @@ public class venta extends javax.swing.JInternalFrame {
             ps = con.getConnection().prepareStatement(SQL_SUM);
             RS = ps.executeQuery();
             while (RS.next()) {                
-                totalfinal = RS.getInt(1);
+                totalfinal = RS.getDouble(1);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
         }
         return totalfinal;
     }
+    
+    //actualizar venta en precio
+    public void actu_venta(){
+        String monto = txtTotalPagar.getText().toString();
+        String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+" WHERE IdVentas = "+idventas+"";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_UPDATE);
+            ps.execute();
+            
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
 
+    //actualizar el stock
+    public void act_stock(){
+        //catidad que queda
+        int veces = (int) txtCantidad.getValue();
+        int sto = Integer.parseInt(txtStock.getText().toString());
+        
+        int actu_stok = sto - veces;
+        
+        int uli = id_prod();
+        
+        String SQL_UPDATE = "UPDATE `producto` SET Stock="+actu_stok+" WHERE IdProducto = "+uli+"";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_UPDATE);
+            ps.execute();
+            
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -427,6 +464,7 @@ public class venta extends javax.swing.JInternalFrame {
         btnGenerar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
@@ -456,7 +494,7 @@ public class venta extends javax.swing.JInternalFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(133, Short.MAX_VALUE)
+                .addContainerGap(147, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -668,6 +706,7 @@ public class venta extends javax.swing.JInternalFrame {
 
         txtTotalPagar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
+        btnGenerar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/money.png"))); // NOI18N
         btnGenerar.setText("GENERAR VENTA");
         btnGenerar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -675,6 +714,7 @@ public class venta extends javax.swing.JInternalFrame {
             }
         });
 
+        btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         btnCancelar.setText("CANCELAR");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
@@ -727,7 +767,7 @@ public class venta extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         pack();
@@ -737,16 +777,33 @@ public class venta extends javax.swing.JInternalFrame {
     
     //boton buscar cliente
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
+        int r;
+        
         LimpiarTabla();
         String cliente = txtCliente.getText().toString();
         String dni = txtCodCliente.getText().toString();
         jTable1.setModel(getDatos(cliente, dni));
-        //txtCodCliente.setText("");
+        
+        if (band == 0) {
+            r = JOptionPane.showConfirmDialog(this, "Cleinte No Registrado, Desea Reagistrar?");
+                if (r == 0) {
+                    Cliente cli = new Cliente();
+                    principal.VentanaPrincipal.add(cli);
+                    cli.setVisible(true);
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(this, "hacer ticket sin cliente registrado");
+                    txtCodCliente.setText("");
+                    txtCliente.setText("");
+                }
+        }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
     
     //boton buscar producto por codigo de barras
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         LimpiarTabla();
+        int hay = 0;
+        int g;
         String cod_pro = txtCodProd.getText().toString();
         
         String SQL_select = "SELECT * FROM `producto` WHERE Codigo_product = '"+cod_pro+"'";
@@ -758,11 +815,24 @@ public class venta extends javax.swing.JInternalFrame {
             while (RS.next()) {                
                 txtProducto.setText(RS.getString(2));
                 txtPrecio.setText(RS.getString(4));
-                cant = Integer.parseInt(RS.getString(4));
+                cant = Double.parseDouble(RS.getString(4));
                 txtStock.setText(RS.getString(5));
+                hay = hay+1;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
+        }
+        if (hay == 0) {
+            g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
+            if (g == 0) {
+                Producto pr = new Producto();
+                principal.VentanaPrincipal.add(pr);
+                pr.setVisible(true);
+                dispose();
+            }else{
+                JOptionPane.showMessageDialog(this, "intenta otro");
+                txtCodProd.setText("");
+            }
         }
         txtCantidad.setValue(1);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -772,8 +842,9 @@ public class venta extends javax.swing.JInternalFrame {
         1.-limpiamos tablas
         2.-calculamos el precio base la canntidad de productos
         3.-verificamos que exista esa venta por el folio y si no la creamos
-        4.-llamamos al metodo de lo total a pagar
-        5.-insertamos el detalle de venta
+        4.-insertamos el detalle de venta
+        5.-llamamos al metodo de lo total a pagar
+        6.-hablamos a la funcion de actualizar el stock
         */
         LimpiarTabla();
         //calcula el precio
@@ -789,13 +860,14 @@ public class venta extends javax.swing.JInternalFrame {
         //total final a pagar
         String totfin = String.valueOf(totalpagar());
         txtTotalPagar.setText(totfin);
+        //actualizar stock
+        act_stock();
         
-        
-        jTable1.setModel(getDatos2());
+        jTable1.setModel(getDatos3());
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        //in_venta();
+        actu_venta();
 
     }//GEN-LAST:event_btnGenerarActionPerformed
 
@@ -830,7 +902,8 @@ public class venta extends javax.swing.JInternalFrame {
         }
         //jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jTable1MouseClicked
-
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscarCliente;

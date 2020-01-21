@@ -5,7 +5,8 @@ import java.awt.Dimension;
 import javax.swing.JInternalFrame;
 
 public class principal extends javax.swing.JFrame {
-
+     
+    
     public principal() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
@@ -214,7 +215,7 @@ public class principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane VentanaPrincipal;
+    public static javax.swing.JDesktopPane VentanaPrincipal;
     private javax.swing.JMenu add;
     private javax.swing.JMenuItem add_cliente;
     private javax.swing.JMenuItem add_producto;
