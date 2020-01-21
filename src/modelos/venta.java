@@ -24,6 +24,7 @@ public class venta extends javax.swing.JInternalFrame {
     //variables globales
     private static int cant = 0;
     private static int ns = 0;
+    private static int idventas = 0;
 
     public venta() {
         ps = null;
@@ -48,7 +49,16 @@ public class venta extends javax.swing.JInternalFrame {
             System.out.println("no jalo el REINICIAR ID");
         }
     }
-    
+    //einicia el id  de detalle de ventas
+    public void reiniciar_id2(){
+        String reiniciarid = "ALTER TABLE detalle_ventas AUTO_INCREMENT = 1";
+        try {
+            ps = con.getConnection().prepareStatement(reiniciarid);
+            ps.execute();
+        } catch (SQLException ex) {
+            System.out.println("no jalo el REINICIAR ID");
+        }
+    }
     //metodo para obtener numero de serie
     public void numserie(){
         int serie = 0;
@@ -94,6 +104,7 @@ public class venta extends javax.swing.JInternalFrame {
         return fechoy;
     }
     
+    //********************AQUI SON SOLO TABLAS************************************************
     //titulos tabla cliente y tabla clietes
     private DefaultTableModel setTitutlos(){
         con = new conexion();
@@ -219,6 +230,7 @@ public class venta extends javax.swing.JInternalFrame {
         }
         DT.setColumnCount(0);
     }
+    //******************************************************************************************
     
     //metodo para calcular precio
     void calcular(){
@@ -264,11 +276,38 @@ public class venta extends javax.swing.JInternalFrame {
         return lolo;
     }
 
+    //obtener id productooo
+    public int id_prod(){
+        String maroji = txtCodProd.getText().toString();
+        
+        String SQL_select = "SELECT * FROM `producto` WHERE Codigo_product = "+maroji+"";
+        int lolo = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                lolo = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no dio el id de producto");
+        }
+        
+        return lolo;
+    }
+    
     //insertar a detalle de venta
     public void in_deta_venta(){
+        //inicializa detalle de venta id
+        reiniciar_id2();
         //insertar idventas
+        exis_fol();
+        //cantidad del producto
+        int cacantidad = (int) txtCantidad.getValue();
+        //precio por todo
+        String prec = txtPrecio.getText().toString();
         
-        String SQL_insert = "INSERT INTO `detalle_ventas` (IdVentas, IdProducto, Cantidad, PrecioVenta) VALUES ('56', '8', '1', '90');";
+        
+        String SQL_insert = "INSERT INTO `detalle_ventas` (IdVentas, IdProducto, Cantidad, PrecioVenta) VALUES ('"+idventas+"', '"+id_prod()+"', '"+cacantidad+"', '"+prec+"');";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
@@ -277,6 +316,7 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "no guardo en detalle_venta");
         }
     }
+    
     //insertar a venta
     public void in_venta(){
         //reiniciar id
@@ -306,11 +346,12 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "no guardo en venta");
         }
     }
+    
     //validar si existe ese folio
     public int exis_fol(){
         int sino = 0;
         
-        String SQL_sell = "SELECT NumeroSerie FROM `ventas` WHERE NumeroSerie="+ns+"; ";
+        String SQL_sell = "SELECT NumeroSerie,IdVentas FROM `ventas` WHERE NumeroSerie="+ns+"; ";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_sell);
@@ -318,6 +359,7 @@ public class venta extends javax.swing.JInternalFrame {
             
             while (RS.next()) {                
                 sino = RS.getInt(1);
+                idventas = RS.getInt(2);
             }
         } catch (SQLException ex) {
             System.out.println("no se puso numSerie");
@@ -325,15 +367,24 @@ public class venta extends javax.swing.JInternalFrame {
         return sino;
     }
     
+    
+    
     //total a pagar 
-    public void totalpagar(){
-        int pp = Integer.parseInt(txtPrecio.getText());
-        int tt = Integer.parseInt(txtTotalPagar.getText());
+    public int totalpagar(){
+        int totalfinal = 0;
         
-        int restot = tt+pp;
-        String rtot = String.valueOf(restot);
+        String SQL_SUM = "SELECT SUM(PrecioVenta) FROM `detalle_ventas` WHERE IdVentas = "+idventas+"";
         
-        txtTotalPagar.setText(rtot);
+        try {
+            ps = con.getConnection().prepareStatement(SQL_SUM);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                totalfinal = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Producto No registrado");
+        }
+        return totalfinal;
     }
 
     @SuppressWarnings("unchecked")
@@ -682,6 +733,8 @@ public class venta extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    //********************************BOTONES DE INTERFAZ*****************************************************************
+    
     //boton buscar cliente
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
         LimpiarTabla();
@@ -715,6 +768,13 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
     //boton agrega producto a ventas
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        /*
+        1.-limpiamos tablas
+        2.-calculamos el precio base la canntidad de productos
+        3.-verificamos que exista esa venta por el folio y si no la creamos
+        4.-llamamos al metodo de lo total a pagar
+        5.-insertamos el detalle de venta
+        */
         LimpiarTabla();
         //calcula el precio
         calcular();
@@ -724,9 +784,11 @@ public class venta extends javax.swing.JInternalFrame {
             in_venta();
             System.out.println("no existeee");
         }
-        totalpagar();
-        
-        
+        //llamar a insertar detalle venta
+        in_deta_venta();
+        //total final a pagar
+        String totfin = String.valueOf(totalpagar());
+        txtTotalPagar.setText(totfin);
         
         
         jTable1.setModel(getDatos2());
