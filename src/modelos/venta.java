@@ -34,6 +34,7 @@ public class venta extends javax.swing.JInternalFrame {
         initComponents();
         //inicializa tabla ventas
         jTable1.setModel(getDatos3());
+        LimpiarTabla();
         //inicializa metodo obtener numero serie
         numserie();
         System.out.println(fechahoy());
@@ -210,6 +211,7 @@ public class venta extends javax.swing.JInternalFrame {
         String SQL_SELECT = "SELECT dv.IdDetalleVentas, p.Nombres, dv.Cantidad, dv.PrecioVenta FROM detalle_ventas dv join producto p ON dv.IdProducto=p.IdProducto JOIN ventas v ON dv.IdVentas=v.IdVentas WHERE v.NumeroSerie="+ns+"";
         try {
             setTitutlos3();
+            
             ps = con.getConnection().prepareStatement(SQL_SELECT);
             RS = ps.executeQuery();
             Object[] fila = new Object[4];
@@ -423,6 +425,7 @@ public class venta extends javax.swing.JInternalFrame {
             System.out.println("no sirve la actualizar");
         }
     }
+    
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -716,6 +719,11 @@ public class venta extends javax.swing.JInternalFrame {
 
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         btnCancelar.setText("CANCELAR");
+        btnCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -868,6 +876,7 @@ public class venta extends javax.swing.JInternalFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         actu_venta();
+        dispose();
 
     }//GEN-LAST:event_btnGenerarActionPerformed
 
@@ -902,7 +911,33 @@ public class venta extends javax.swing.JInternalFrame {
         }
         //jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        
+        String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_del);
+            ps.execute();
+            
+        } catch (SQLException ex) {
+            System.out.println("no elimina detalle de venta");
+        }
+        del_ventas();
+        dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
     
+    public void del_ventas(){
+        String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";
+        
+        try {
+            ps = con.getConnection().prepareStatement(SQL_elim);
+            ps.execute();
+            
+        } catch (SQLException ex) {
+            System.out.println("no elimina ventas");
+        }
+    }
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
