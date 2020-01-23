@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import imprimir.imprimir2;
 
 public class venta extends javax.swing.JInternalFrame {
     //variables para conexion db
@@ -876,8 +877,9 @@ public class venta extends javax.swing.JInternalFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         actu_venta();
+        imprimir2 imp = new imprimir2();
+        imp.setVisible(true);
         dispose();
-
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
