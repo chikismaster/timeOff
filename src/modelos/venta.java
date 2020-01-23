@@ -26,9 +26,10 @@ public class venta extends javax.swing.JInternalFrame {
     private ResultSet RS;
     //variables globales
     private static double cant = 0;
-    private static int ns = 0;
+    public static int ns = 0;
     private static int idventas = 0;
     private static int band = 0;
+    public static String nom_cliente ="";
 
     public venta() {
         ps = null;
@@ -421,6 +422,9 @@ public class venta extends javax.swing.JInternalFrame {
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
             ps.execute();
+            
+            String act= String.valueOf(actu_stok);
+            txtStock.setText(act);
             
         } catch (SQLException e) {
             System.out.println("no sirve la actualizar");
@@ -876,6 +880,7 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
+        nom_cliente = txtCliente.getText().toString();
         actu_venta();
         imprimir2 imp = new imprimir2();
         imp.setVisible(true);
