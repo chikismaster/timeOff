@@ -24,8 +24,8 @@ public class login extends javax.swing.JFrame {
         initComponents();
         ps = null;
         this.setLocationRelativeTo(null);
-        txtNombre.setText("mc");
-        txtcontra.setText("123");
+        txtNombre.setText("");
+        txtcontra.setText("");
     }
 
     @SuppressWarnings("unchecked")
@@ -290,7 +290,7 @@ public class login extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("ACCESO Al SISTEMA \"TIME OFF\"");
+        jLabel1.setText("ACCESO Al SISTEMA");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
