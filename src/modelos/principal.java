@@ -3,13 +3,21 @@ package modelos;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
 
 public class principal extends javax.swing.JFrame {
      
+    //variables globales
+    public static String nom_gfe;
+    //definimos el nombre del superusario va a igualar
+    public static String superuser = "mc";
     
     public principal() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
+        //definimos una variable para ver superusuario
+        nom_gfe = login.a;
+        
     }
     
     void  CentrarVentana(JInternalFrame frame){
@@ -170,13 +178,23 @@ public class principal extends javax.swing.JFrame {
     }//GEN-LAST:event_add_clienteActionPerformed
 
     private void add_productoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_productoActionPerformed
-        Producto pro = new Producto();
-        CentrarVentana(pro);
+        //validando super usuario
+        if(nom_gfe.equals(superuser)){
+            Producto pro = new Producto();
+            CentrarVentana(pro);   
+        }else{
+            JOptionPane.showMessageDialog(null, "tu no tienes permisos");
+        }
     }//GEN-LAST:event_add_productoActionPerformed
 
     private void add_vendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_vendedorActionPerformed
-        vendedor ven = new vendedor();
-        CentrarVentana(ven);
+        if(nom_gfe.equals(superuser)){
+            vendedor ven = new vendedor();
+            CentrarVentana(ven);  
+        }else{
+            JOptionPane.showMessageDialog(null, "tu no tienes permisos");
+        }
+        
     }//GEN-LAST:event_add_vendedorActionPerformed
 
     /**

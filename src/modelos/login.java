@@ -11,10 +11,11 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class login extends javax.swing.JFrame {
-    
+    //variables globales de login
     public static String a;
+    
     public static int dd;
-    //conexion con = new conexion();
+    
     private PreparedStatement ps;
     private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
@@ -316,16 +317,11 @@ public class login extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //boton de salir
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         System.exit(0);
-        /*principal uno=new principal();
-        uno.setVisible(true);
-        dispose();
-        con = new conexion();
-        Connection calar = con.getConnection();*/
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
     public void cambiar_pag(){
         principal uno=new principal();
         uno.setVisible(true);

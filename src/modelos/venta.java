@@ -30,7 +30,7 @@ public class venta extends javax.swing.JInternalFrame {
     private static int idventas = 0;
     private static int band = 0;
     public static String nom_cliente ="";
-
+    //constructor de venta
     public venta() {
         ps = null;
         initComponents();
