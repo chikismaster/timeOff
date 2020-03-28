@@ -319,6 +319,7 @@ public class login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     //boton de salir
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        con.desconectar();
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
     

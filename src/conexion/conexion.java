@@ -41,9 +41,15 @@ public class conexion {
     public Connection getConnection(){
             return conn;
     }
-    public boolean sijalo(){
-        
     
+    public void desconectar(){
+        conn = null;
+        if (conn == null) {
+            System.out.println("conexion terminada");
+        }
+    }
+    
+    public boolean sijalo(){
         return cam;
     }
 }
