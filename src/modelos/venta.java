@@ -254,7 +254,7 @@ public class venta extends javax.swing.JInternalFrame {
     //metodo retorna id cliente
     public int id_cli(String dni){
         int baba = 0;
-        String SQL_select = "SELECT IdCliente FROM cliente WHERE Dni='"+dni+"'";
+        String SQL_select = "SELECT IdCliente FROM cliente WHERE Celular='"+dni+"'";
         try {
             ps = con.getConnection().prepareStatement(SQL_select);
             RS = ps.executeQuery();
@@ -262,7 +262,7 @@ public class venta extends javax.swing.JInternalFrame {
                 baba = RS.getInt(1);
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Producto No registrado");
+            JOptionPane.showMessageDialog(null, "ID cliente");
         }
         return baba;
     }
@@ -279,7 +279,7 @@ public class venta extends javax.swing.JInternalFrame {
                 lolo = RS.getInt(1);
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Producto No registrado");
+            JOptionPane.showMessageDialog(null, "no encuentra ID vendedor");
         }
         
         return lolo;
@@ -346,7 +346,7 @@ public class venta extends javax.swing.JInternalFrame {
         //insertar la cantidad
         double costo = Double.parseDouble(txtPrecio.getText().toString());
         //insertar a ventas
-        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, Estado) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", '1')";
+        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, tipo_pago) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", '1')";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
