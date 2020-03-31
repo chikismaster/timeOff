@@ -135,7 +135,7 @@ public class venta extends javax.swing.JInternalFrame {
             o = "%";
         }
         
-        String SQL_SELECT = "SELECT * FROM cliente WHERE Nombres LIKE '"+usu+p+"' OR Dni LIKE '"+dni+o+"'";
+        String SQL_SELECT = "SELECT * FROM cliente WHERE Nombres LIKE '"+usu+p+"' OR Celular LIKE '"+dni+o+"'";
         try {
             setTitutlos();
             ps = con.getConnection().prepareStatement(SQL_SELECT);
@@ -819,7 +819,7 @@ public class venta extends javax.swing.JInternalFrame {
         int g;
         String cod_pro = txtCodProd.getText().toString();
         
-        String SQL_select = "SELECT * FROM `producto` WHERE Codigo_product = '"+cod_pro+"'";
+        String SQL_select = "SELECT p.IdProducto, p.Nombres,p.Precio,p.Stock  FROM producto as p WHERE Codigo_product = '"+cod_pro+"'";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_select);
@@ -827,9 +827,9 @@ public class venta extends javax.swing.JInternalFrame {
             
             while (RS.next()) {                
                 txtProducto.setText(RS.getString(2));
-                txtPrecio.setText(RS.getString(4));
-                cant = Double.parseDouble(RS.getString(4));
-                txtStock.setText(RS.getString(5));
+                txtPrecio.setText(RS.getString(3));
+                cant = Double.parseDouble(RS.getString(3));
+                txtStock.setText(RS.getString(4));
                 hay = hay+1;
             }
         } catch (SQLException ex) {

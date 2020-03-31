@@ -32,6 +32,8 @@ public class Cliente extends javax.swing.JInternalFrame {
         DT.addColumn("Nombres");
         DT.addColumn("Direccion");
         DT.addColumn("Estado");
+        DT.addColumn("adeudo");
+        
         
         return DT;
     }
@@ -49,6 +51,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                 fila[2] = RS.getString(3);
                 fila[3] = RS.getString(4);
                 fila[4] = RS.getString(5);
+                fila[5] = RS.getString(6);
                 DT.addRow(fila);
             }
             System.out.println("si hizo el desmadre");
@@ -109,7 +112,7 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
-        jLabel1.setText("DNI :");
+        jLabel1.setText("CELULAR:");
 
         jLabel2.setText("NOMBRES :");
 
@@ -223,17 +226,11 @@ public class Cliente extends javax.swing.JInternalFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 175, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -254,7 +251,7 @@ public class Cliente extends javax.swing.JInternalFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
@@ -270,8 +267,8 @@ public class Cliente extends javax.swing.JInternalFrame {
         if ((dni.equals(""))||(nom.equals(""))||(dir.equals("")) || (estado.equals("SELECCIONAR"))) {
             JOptionPane.showMessageDialog(null, "Debe Ingresar todos los campos");
         }else{
-            String SQL_INSERT = "INSERT INTO cliente(Dni, Nombres, Direccion, Estado) VALUES ('"+dni+"','"+nom+"','"+dir+"','"+estado+"')";
-            
+            //String SQL_INSERT = "INSERT INTO cliente(Dni, Nombres, Direccion, Estado, adeudo) VALUES ('"+dni+"','"+nom+"','"+dir+"','"+estado+"','0')";
+            String SQL_INSERT = "INSERT INTO cliente(Celular, Nombres, Direccion, Estado, adeudo) VALUES ('"+dni+"','"+nom+"','"+dir+"','"+estado+"','0')";
             try {
                 ps = con.getConnection().prepareStatement(SQL_INSERT);
                 int res = ps.executeUpdate();
@@ -300,7 +297,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         String dir = txtDir.getText().toString();
         String estado = cboEstado.getSelectedItem().toString();
         //consulta sql 
-        String SQL_UPDATE = "UPDATE cliente SET Dni = '"+dni+"', Nombres='"+nom+"', Direccion='"+dir+"', Estado='"+estado+"' WHERE IdCliente="+id+"";
+        String SQL_UPDATE = "UPDATE cliente SET Celular='"+dni+"', Nombres='"+nom+"', Direccion='"+dir+"', Estado='"+estado+"' WHERE IdCliente="+id+"";
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
             ps.execute();
@@ -348,6 +345,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         String dir = tabla_clientes.getValueAt(fila, 3).toString();
         int estado = Integer.parseInt(tabla_clientes.getValueAt(fila, 4).toString());
         
+        
         txtDni.setText(dni);
         txtNom.setText(nom);
         txtDir.setText(dir);
@@ -366,14 +364,8 @@ public class Cliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable tabla_clientes;
     private javax.swing.JTextField txtDir;
     private javax.swing.JTextField txtDni;
