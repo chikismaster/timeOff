@@ -40,6 +40,7 @@ public class principal extends javax.swing.JFrame {
         btn_salir = new javax.swing.JMenuItem();
         ventas = new javax.swing.JMenu();
         genera_ventas = new javax.swing.JMenuItem();
+        genera_abono = new javax.swing.JMenuItem();
         add = new javax.swing.JMenu();
         add_cliente = new javax.swing.JMenuItem();
         add_producto = new javax.swing.JMenuItem();
@@ -97,6 +98,14 @@ public class principal extends javax.swing.JFrame {
             }
         });
         ventas.add(genera_ventas);
+
+        genera_abono.setText("GeneraAbono");
+        genera_abono.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                genera_abonoActionPerformed(evt);
+            }
+        });
+        ventas.add(genera_abono);
 
         jMenuBar1.add(ventas);
 
@@ -192,10 +201,14 @@ public class principal extends javax.swing.JFrame {
             vendedor ven = new vendedor();
             CentrarVentana(ven);  
         }else{
-            JOptionPane.showMessageDialog(null, "tu no tienes permisos");
-        }
-        
+            JOptionPane.showMessageDialog(null, "tu no tienes permisos");        }
     }//GEN-LAST:event_add_vendedorActionPerformed
+
+    private void genera_abonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_genera_abonoActionPerformed
+        // TODO add your handling code here:
+        abono ab = new abono();
+        CentrarVentana(ab);
+    }//GEN-LAST:event_genera_abonoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,6 +253,7 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem add_vendedor;
     private javax.swing.JMenuItem btn_ayuda;
     private javax.swing.JMenuItem btn_salir;
+    private javax.swing.JMenuItem genera_abono;
     private javax.swing.JMenuItem genera_ventas;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
@@ -247,4 +261,5 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JMenu menu;
     private javax.swing.JMenu ventas;
     // End of variables declaration//GEN-END:variables
+
 }

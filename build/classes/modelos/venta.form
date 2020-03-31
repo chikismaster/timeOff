@@ -261,6 +261,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txtCodCliente">
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCodClienteActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnBuscarCliente">
           <Properties>
@@ -288,6 +291,9 @@
               <Color blue="cc" green="33" red="0" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtClienteActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
@@ -405,6 +411,9 @@
               <Color blue="cc" green="33" red="0" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtVendedorActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JTextField" name="txtFecha">
           <Properties>
@@ -422,6 +431,9 @@
               <Color blue="cc" green="33" red="0" type="rgb"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtFechaActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

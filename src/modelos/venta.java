@@ -536,6 +536,12 @@ public class venta extends javax.swing.JInternalFrame {
 
         jLabel6.setText("COD: CLIENTE :");
 
+        txtCodCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCodClienteActionPerformed(evt);
+            }
+        });
+
         btnBuscarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
         btnBuscarCliente.setText("Buscar");
         btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -548,6 +554,11 @@ public class venta extends javax.swing.JInternalFrame {
         txtCliente.setForeground(new java.awt.Color(0, 51, 255));
         txtCliente.setCaretColor(new java.awt.Color(0, 51, 255));
         txtCliente.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtClienteActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("CLIENTE :");
 
@@ -597,12 +608,22 @@ public class venta extends javax.swing.JInternalFrame {
         txtVendedor.setForeground(new java.awt.Color(0, 51, 255));
         txtVendedor.setCaretColor(new java.awt.Color(0, 51, 255));
         txtVendedor.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtVendedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtVendedorActionPerformed(evt);
+            }
+        });
 
         txtFecha.setEditable(false);
         txtFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFecha.setForeground(new java.awt.Color(0, 51, 255));
         txtFecha.setCaretColor(new java.awt.Color(0, 51, 255));
         txtFecha.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFechaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -933,6 +954,22 @@ public class venta extends javax.swing.JInternalFrame {
         del_ventas();
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+
+    private void txtCodClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCodClienteActionPerformed
+
+    private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtClienteActionPerformed
+
+    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaActionPerformed
+
+    private void txtVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVendedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtVendedorActionPerformed
     
     public void del_ventas(){
         String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";
