@@ -902,6 +902,7 @@ public class venta extends javax.swing.JInternalFrame {
 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         nom_cliente = txtCliente.getText().toString();
+        
         actu_venta();
         imprimir2 imp = new imprimir2();
         imp.setVisible(true);

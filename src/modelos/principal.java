@@ -47,6 +47,10 @@ public class principal extends javax.swing.JFrame {
         add_vendedor = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenuItem7 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        corteVenta = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -141,12 +145,47 @@ public class principal extends javax.swing.JFrame {
 
         jMenuBar1.add(add);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/graf2.png"))); // NOI18N
         jMenu4.setText("Reportes");
 
         jMenuItem7.setText("Reporte de Ventas");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem7);
 
+        jMenuItem3.setText("Reporte ganancias");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItem3);
+
         jMenuBar1.add(jMenu4);
+
+        corteVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/abono.png"))); // NOI18N
+        corteVenta.setText("Corte Ventas");
+
+        jMenuItem1.setText("inicial");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        corteVenta.add(jMenuItem1);
+
+        jMenuItem2.setText("corte final");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        corteVenta.add(jMenuItem2);
+
+        jMenuBar1.add(corteVenta);
 
         setJMenuBar(jMenuBar1);
 
@@ -210,6 +249,29 @@ public class principal extends javax.swing.JFrame {
         CentrarVentana(ab);
     }//GEN-LAST:event_genera_abonoActionPerformed
 
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        reporteVentas rv = new reporteVentas();
+        CentrarVentana(rv);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        reporteGanancias rg = new reporteGanancias();
+        CentrarVentana(rg);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        corteInicial ci = new corteInicial();
+        CentrarVentana(ci);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        corteFinal cf  = new corteFinal();
+        CentrarVentana(cf);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -253,10 +315,14 @@ public class principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem add_vendedor;
     private javax.swing.JMenuItem btn_ayuda;
     private javax.swing.JMenuItem btn_salir;
+    private javax.swing.JMenu corteVenta;
     private javax.swing.JMenuItem genera_abono;
     private javax.swing.JMenuItem genera_ventas;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JMenu menu;
     private javax.swing.JMenu ventas;
