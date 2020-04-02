@@ -398,7 +398,7 @@ public class venta extends javax.swing.JInternalFrame {
     //actualizar venta en precio
     public void actu_venta(String tpago){
         String monto = txtTotalPagar.getText().toString();
-        String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+",  WHERE IdVentas = "+idventas+"";
+        String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+", tipo_pago='"+tpago+"' WHERE IdVentas = "+idventas+"";
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
             ps.execute();
@@ -589,6 +589,11 @@ public class venta extends javax.swing.JInternalFrame {
         txtStock.setForeground(new java.awt.Color(0, 51, 255));
         txtStock.setCaretColor(new java.awt.Color(0, 51, 255));
         txtStock.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtStock.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtStockActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/add_1.png"))); // NOI18N
         jButton3.setText("Agregar");
@@ -874,31 +879,50 @@ public class venta extends javax.swing.JInternalFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         /*
         1.-limpiamos tablas
-        2.-calculamos el precio base la canntidad de productos
-        3.-verificamos que exista esa venta por el folio y si no la creamos
-        4.-insertamos el detalle de venta
-        5.-llamamos al metodo de lo total a pagar
-        6.-hablamos a la funcion de actualizar el stock
+        2.-checamos si stock es mayor a lo que desea
+        3.-calculamos el precio base la canntidad de productos
+        4.-verificamos que exista esa venta por el folio y si no la creamos
+        5.-insertamos el detalle de venta
+        6.-llamamos al metodo de lo total a pagar
+        7.-hablamos a la funcion de actualizar el stock
+        8.-limpiamos textfield al momento de agregar
         */
         LimpiarTabla();
-        //calcula el precio
-        calcular();
-        //calamos si existe el folio de venta y si no para crearlo
-        System.out.println(exis_fol());
-        if (exis_fol() == 0) {
-            in_venta();
-            System.out.println("no existeee");
+        //validar producto en stock
+        int cantPro = Integer.parseInt(txtCantidad.getValue().toString());
+        int cantSotck = Integer.parseInt(txtStock.getText());
+        if (cantPro <= cantSotck) {
+            JOptionPane.showMessageDialog(null, "Si se puede realizar la compra");
+            //calcula el precio
+            calcular();
+            //calamos si existe el folio de venta y si no para crearlo
+            System.out.println(exis_fol());
+            if (exis_fol() == 0) {
+                in_venta();
+                System.out.println("no existeee");
+            }
+            //llamar a insertar detalle venta
+            in_deta_venta();
+            //total final a pagar
+            String totfin = String.valueOf(totalpagar());
+            txtTotalPagar.setText(totfin);
+            //actualizar stock
+            act_stock();
+            jTable1.setModel(getDatos3());
+            //limpiamos productos
+            limpiar_prod();
+        }else{
+            JOptionPane.showMessageDialog(null, "No alcanzan los productos");
+            //limpiamos productos
+            limpiar_prod();
         }
-        //llamar a insertar detalle venta
-        in_deta_venta();
-        //total final a pagar
-        String totfin = String.valueOf(totalpagar());
-        txtTotalPagar.setText(totfin);
-        //actualizar stock
-        act_stock();
-        
-        jTable1.setModel(getDatos3());
     }//GEN-LAST:event_jButton3ActionPerformed
+    private void limpiar_prod(){
+        //limpiar textfield
+        txtCodProd.setText("");
+        txtProducto.setText("");
+        txtPrecio.setText(""); 
+    }
     //boton final de generar venta
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         nom_cliente = txtCliente.getText().toString();
@@ -999,6 +1023,10 @@ public class venta extends javax.swing.JInternalFrame {
     private void txtVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVendedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtVendedorActionPerformed
+
+    private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtStockActionPerformed
     
     public void del_ventas(){
         String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";
