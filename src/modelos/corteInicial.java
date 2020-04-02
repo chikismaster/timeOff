@@ -4,20 +4,120 @@
  * and open the template in the editor.
  */
 package modelos;
+import conexion.conexion;
+import java.awt.Dimension;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.print.DocFlavor;
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import imprimir.imprimir2;
+
 
 /**
  *
  * @author marca
  */
 public class corteInicial extends javax.swing.JInternalFrame {
-
+    //variables globales
+    public static String nom_gfe;
+    //para conexion
+    private PreparedStatement ps;
+    private conexion con = new conexion();
+    private DefaultTableModel DT = new DefaultTableModel();
+    private ResultSet RS;
     /**
      * Creates new form corteInicial
      */
     public corteInicial() {
+        ps = null;
         initComponents();
+        nom_gfe = login.a;
+        System.out.println(fechahoy());
+        //para obtener vendedor usuario
+        txtVendedor.setText(login.a);
+    }
+    //funcion que devuelve la fecha de hoy en string
+    public String fechahoy(){
+        Date fecha = new Date();
+        
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = new GregorianCalendar();
+        
+        String dia = Integer.toString(c1.get(Calendar.DATE));
+        String mes = Integer.toString(c2.get(Calendar.MONTH));
+        int mm = Integer.parseInt(mes);
+        int nmes = mm +1;
+        String memes = String.valueOf(nmes);
+        if (nmes < 10) {
+            memes = "0"+memes;
+        }
+        String anio = Integer.toString(c1.get(Calendar.YEAR));
+        
+        String fechoy = anio+"-"+memes+"-"+dia;
+        
+        txtFecha.setText(fechoy);
+        return fechoy;
+    }
+      
+    //insertar en tabla abono
+    public void insertar_fondo(){
+        //obtener idvendedor
+        int idv = id_ven();
+        String inicial = txtCantidad.getText().toString();
+        String fec = fechahoy();
+        String SQL_insert = "INSERT INTO corte(`IdVendedor`, `Cant_inicial`, `Fecha_inicio`,`Estado`) VALUES ("+idv+",'"+inicial+"','"+fec+"','1')";       
+        try {
+            ps = con.getConnection().prepareStatement(SQL_insert);
+            ps.execute();          
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no guardo en corte");
+        }     
     }
 
+    //Trae el id del vendedor
+        public int id_ven(){
+        String userven = txtVendedor.getText().toString();
+        String SQL_select = "SELECT * FROM `vendedor` WHERE User = '"+userven+"'";
+        int lolo = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                lolo = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no encuentra ID vendedor");
+        }
+        
+        return lolo;
+    }
+    //Verifica si aun no se a echo corte 
+     public int estado_corte(){
+        String Fecha = txtFecha.getText().toString();
+        String SQL_select = "SELECT Estado FROM corte WHERE Fecha_inicio = '"+Fecha+"' and Estado = '1'";
+        int lolo = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                lolo = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no encuentra ID vendedor");
+        }
+        return lolo;
+    }
+     
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,36 +127,144 @@ public class corteInicial extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        txtCantidad = new javax.swing.JTextField();
+        txtFecha = new javax.swing.JTextField();
+        jLabel15 = new javax.swing.JLabel();
+        Aceptar = new javax.swing.JButton();
+        txtVendedor = new javax.swing.JTextField();
+        jLabel16 = new javax.swing.JLabel();
 
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
 
-        jLabel1.setText("Corte de ventas Inicial");
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("Declarar Fondo Inicial");
+
+        txtCantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCantidadActionPerformed(evt);
+            }
+        });
+
+        txtFecha.setEditable(false);
+        txtFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtFecha.setForeground(new java.awt.Color(0, 51, 255));
+        txtFecha.setCaretColor(new java.awt.Color(0, 51, 255));
+        txtFecha.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtFecha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFechaActionPerformed(evt);
+            }
+        });
+
+        jLabel15.setText("Cantidad Inicial");
+
+        Aceptar.setText("Aceptar");
+        Aceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AceptarActionPerformed(evt);
+            }
+        });
+
+        txtVendedor.setEditable(false);
+        txtVendedor.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtVendedor.setForeground(new java.awt.Color(0, 51, 255));
+        txtVendedor.setCaretColor(new java.awt.Color(0, 51, 255));
+        txtVendedor.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtVendedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtVendedorActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("Usuario");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(119, 119, 119)
-                .addComponent(jLabel1)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(140, 140, 140)
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jLabel15)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(102, 102, 102)
-                .addComponent(jLabel1)
-                .addContainerGap(162, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel11)
+                .addGap(18, 18, 18)
+                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Aceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(46, 46, 46)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void txtCantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCantidadActionPerformed
+
+    private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFechaActionPerformed
+
+    private void AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptarActionPerformed
+        // TODO add your handling code here:
+        int est = estado_corte();
+        if(est==1){
+            JOptionPane.showMessageDialog(null, "Haga primero corte de caja para poder volver a hacer inicio de fondo");
+            dispose();
+        }
+        else{
+            insertar_fondo();
+            JOptionPane.showMessageDialog(null, "Se genero Corte Inicial");
+            dispose();
+        }
+//JOptionPane.showMessageDialog(null, "si jalo el boton!!");
+    }//GEN-LAST:event_AceptarActionPerformed
+
+    private void txtVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVendedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtVendedorActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton Aceptar;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JTextField txtCantidad;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JTextField txtVendedor;
     // End of variables declaration//GEN-END:variables
 }

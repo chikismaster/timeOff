@@ -80,6 +80,7 @@ public class abono extends javax.swing.JInternalFrame {
     public void actualizaradeudo(String idCliente, String abono){
         double adeuda = monto(idCliente);
         double abo = Double.parseDouble(abono);
+        
         double tot= adeuda-abo;
         System.out.println(tot);
         String SQL_UPDATE = "UPDATE `cliente` SET adeudo="+tot+" WHERE IdCliente = "+idCliente+"";
