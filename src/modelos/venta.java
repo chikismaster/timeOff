@@ -346,7 +346,7 @@ public class venta extends javax.swing.JInternalFrame {
         //insertar la cantidad
         double costo = Double.parseDouble(txtPrecio.getText().toString());
         //insertar a ventas
-        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, tipo_pago) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", '1')";
+        String SQL_insert = "INSERT INTO ventas(IdCliente, IdVendedor, NumeroSerie, FechaVentas, Monto, tipo_pago) VALUES ("+ic+", "+idv+", "+nums+", '"+ffec+"', "+costo+", 'e')";
         
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
@@ -396,9 +396,9 @@ public class venta extends javax.swing.JInternalFrame {
     }
     
     //actualizar venta en precio
-    public void actu_venta(){
+    public void actu_venta(String tpago){
         String monto = txtTotalPagar.getText().toString();
-        String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+" WHERE IdVentas = "+idventas+"";
+        String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+",  WHERE IdVentas = "+idventas+"";
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
             ps.execute();
@@ -899,14 +899,42 @@ public class venta extends javax.swing.JInternalFrame {
         
         jTable1.setModel(getDatos3());
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    //boton final de generar venta
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         nom_cliente = txtCliente.getText().toString();
+        //definimos la variable que sera tipo de pago
+        String[] options = {"Tarjeta", "Efectivo", "Abono"};
+        int seleccion = JOptionPane.showOptionDialog(null, "Es necesario que seleccione una opcion", "Titulo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        String tpago;
+        //
+        if (seleccion == 0) {
+            JOptionPane.showMessageDialog(this, "pago con Tarjeta");
+            tpago = "t";
+            actu_venta(tpago);
+            imprimir2 imp = new imprimir2();
+            imp.setVisible(true);
+            dispose();
+        }else if (seleccion == 1){
+            JOptionPane.showMessageDialog(this, "pago con Efectivo");
+            tpago = "e";
+            actu_venta(tpago);
+            imprimir2 imp = new imprimir2();
+            imp.setVisible(true);
+            dispose();
+        }else if (seleccion == 2){
+            JOptionPane.showMessageDialog(this, "pago en Abono");
+            tpago = "a";
+            actu_venta(tpago);
+            imprimir2 imp = new imprimir2();
+            imp.setVisible(true);
+            dispose();
+        }else {
+            JOptionPane.showMessageDialog(this, "cancelo");
+        }
         
-        actu_venta();
-        imprimir2 imp = new imprimir2();
-        imp.setVisible(true);
-        dispose();
+
+        
+        
     }//GEN-LAST:event_btnGenerarActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
