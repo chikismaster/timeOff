@@ -148,6 +148,7 @@ public class principal extends javax.swing.JFrame {
         jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/graf2.png"))); // NOI18N
         jMenu4.setText("Reportes");
 
+        jMenuItem7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/grafic.png"))); // NOI18N
         jMenuItem7.setText("Reporte de Ventas");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +157,7 @@ public class principal extends javax.swing.JFrame {
         });
         jMenu4.add(jMenuItem7);
 
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/rg2.png"))); // NOI18N
         jMenuItem3.setText("Reporte ganancias");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

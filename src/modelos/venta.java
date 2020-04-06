@@ -39,6 +39,7 @@ public class venta extends javax.swing.JInternalFrame {
         LimpiarTabla();
         //inicializa metodo obtener numero serie
         numserie();
+        //poner fecha del vendedo
         System.out.println(fechahoy());
         //para obtener vendedor usuario
         txtVendedor.setText(login.a);
