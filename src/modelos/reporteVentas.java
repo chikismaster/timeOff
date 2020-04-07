@@ -1,15 +1,27 @@
 package modelos;
 
+import conexion.conexion;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.table.DefaultTableModel;
 
 public class reporteVentas extends javax.swing.JInternalFrame {
+    //para conexion
+    private PreparedStatement ps;
+    private conexion con = new conexion();
+    private DefaultTableModel DT = new DefaultTableModel();
+    private ResultSet RS;
 
     public reporteVentas() {
         initComponents();
         //poner fecha del dia llamada desde una funcion
-        System.out.println("fecha reporte ventas: "+fechahoy());
+        FechaDay.setText(fechahoy());
+        //agregamos la fecha
+        txtFechaFin.setText(fechahoy());
     }
     //funcion para obtener la fecha de hoy
     public String fechahoy(){
@@ -19,6 +31,10 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         Calendar c2 = new GregorianCalendar();
         
         String dia = Integer.toString(c1.get(Calendar.DATE));
+        int diaint = Integer.parseInt(dia);
+        if (diaint < 10) {
+            dia = "0"+dia;
+        }
         String mes = Integer.toString(c2.get(Calendar.MONTH));
         int mm = Integer.parseInt(mes);
         int nmes = mm +1;
@@ -30,8 +46,31 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         
         String fechoy = anio+"-"+memes+"-"+dia;
         
-        FechaDay.setText(fechoy);
         return fechoy;
+    }
+    //obtener cantidad de ganacias de tal fecha a tal fecha
+    public void sumaGanancias(){
+        //usar los textfield de fecha inicial y final
+        String fechaInicial = txtFechaInicio.getText();
+        String fechaFin = txtFechaFin.getText();
+        //consulta SQL
+        String SQL_sel = "SELECT SUM(v.Monto) from ventas v WHERE FechaVentas BETWEEN '"+fechaInicial+"' and '"+fechaFin+"'";
+        //variable guarda lo que trae la consulta
+        int totalVentas = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_sel);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                totalVentas = RS.getInt(1);
+            }
+        } catch (SQLException ex) {
+            System.out.println("No se saco el total de ventas");
+        }
+        //guardamos el resultado en el textfield (ganancias)
+        String tv = String.valueOf(totalVentas);
+        txtGanancias.setText(tv);
+        //limpiamos la fecha de inicio por si quiere otra consulta
+        txtFechaInicio.setText("");
     }
     
     
@@ -45,14 +84,14 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         FechaDay = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtFechaInicio = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtFechaFin = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         btnCancelar = new javax.swing.JButton();
         btnAccept = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtGanancias = new javax.swing.JTextField();
 
         setClosable(true);
         setIconifiable(true);
@@ -92,8 +131,12 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Ingresa Fecha de inicio: ");
 
+        txtFechaInicio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Ingresa Fecha de fin: ");
+
+        txtFechaFin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -106,8 +149,8 @@ public class reporteVentas extends javax.swing.JInternalFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -116,11 +159,11 @@ public class reporteVentas extends javax.swing.JInternalFrame {
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(23, Short.MAX_VALUE))
         );
 
@@ -138,9 +181,17 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         btnAccept.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnAccept.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/acep2.png"))); // NOI18N
         btnAccept.setText("Aceptar");
+        btnAccept.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAcceptActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel4.setText("Ganancias:");
+
+        txtGanancias.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
+        txtGanancias.setForeground(new java.awt.Color(204, 0, 0));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -154,7 +205,7 @@ public class reporteVentas extends javax.swing.JInternalFrame {
                 .addGap(37, 37, 37)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3)
+                .addComponent(txtGanancias)
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -162,7 +213,7 @@ public class reporteVentas extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField3)
+                    .addComponent(txtGanancias)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnAccept, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -201,6 +252,10 @@ public class reporteVentas extends javax.swing.JInternalFrame {
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
+    //boton aceptar accion
+    private void btnAcceptActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAcceptActionPerformed
+        sumaGanancias();
+    }//GEN-LAST:event_btnAcceptActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -214,8 +269,8 @@ public class reporteVentas extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField txtFechaFin;
+    private javax.swing.JTextField txtFechaInicio;
+    private javax.swing.JTextField txtGanancias;
     // End of variables declaration//GEN-END:variables
 }
