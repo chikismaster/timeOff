@@ -4,6 +4,10 @@ import conexion.conexion;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 public class reporteGanancias extends javax.swing.JInternalFrame {
@@ -15,8 +19,34 @@ public class reporteGanancias extends javax.swing.JInternalFrame {
     
     public reporteGanancias() {
         initComponents();
-        
+        txtFechaFin.setText(fechahoy());
     }
+    //funcion para obtener la fecha de hoy
+    public String fechahoy(){
+        Date fecha = new Date();
+        
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = new GregorianCalendar();
+        
+        String dia = Integer.toString(c1.get(Calendar.DATE));
+        int diaint = Integer.parseInt(dia);
+        if (diaint < 10) {
+            dia = "0"+dia;
+        }
+        String mes = Integer.toString(c2.get(Calendar.MONTH));
+        int mm = Integer.parseInt(mes);
+        int nmes = mm +1;
+        String memes = String.valueOf(nmes);
+        if (nmes < 10) {
+            memes = "0"+memes;
+        }
+        String anio = Integer.toString(c1.get(Calendar.YEAR));
+        
+        String fechoy = anio+"-"+memes+"-"+dia;
+        
+        return fechoy;
+    }
+    
     
     private DefaultTableModel setTitutlos3(){
         DT.addColumn("Productos");
@@ -24,24 +54,32 @@ public class reporteGanancias extends javax.swing.JInternalFrame {
         return DT;
     }
     private DefaultTableModel getDatos3(){
-        
-        String SQL_SELECT = "SELECT p.Nombres, SUM(dv.PrecioVenta - (dv.Cantidad * p.precio_compra)) FROM detalle_ventas dv JOIN ventas v ON dv.IdVentas=v.IdVentas JOIN producto p ON p.IdProducto=dv.IdProducto WHERE v.FechaVentas BETWEEN '2020-03-01' AND '2020-04-07' GROUP BY p.IdProducto";
-        try {
-            setTitutlos3();
-            
-            ps = con.getConnection().prepareStatement(SQL_SELECT);
-            RS = ps.executeQuery();
-            Object[] fila = new Object[2];
-            while (RS.next()){
-                fila[0] = RS.getString(1);
-                fila[1] = RS.getDouble(2);
-                DT.addRow(fila);
+        //usar los textfield de fecha inicial y final
+        String fechaInicial = txtFechaInicio.getText();
+        String fechaFin = txtFechaFin.getText();
+        if(fechaInicial.equals("") && fechaFin.equals("")){
+            JOptionPane.showMessageDialog(null, "llene los campos de que a que fecha quiere un resumen de ganacias");
+        }else{
+            //consulta sql
+            String SQL_SELECT = "SELECT p.Nombres, SUM(dv.PrecioVenta - (dv.Cantidad * p.precio_compra)) FROM detalle_ventas dv JOIN ventas v ON dv.IdVentas=v.IdVentas JOIN producto p ON p.IdProducto=dv.IdProducto WHERE v.FechaVentas BETWEEN '"+fechaInicial+"' AND '"+fechaFin+"' GROUP BY p.IdProducto";
+            try {
+                setTitutlos3();
+
+                ps = con.getConnection().prepareStatement(SQL_SELECT);
+                RS = ps.executeQuery();
+                Object[] fila = new Object[2];
+                while (RS.next()){
+                    fila[0] = RS.getString(1);
+                    fila[1] = RS.getDouble(2);
+                    DT.addRow(fila);
+                }
+                //System.out.println("si hizo el desmadre");
+            } catch (SQLException e) {
+                System.out.println("error de select");
             }
-            //System.out.println("si hizo el desmadre");
-        } catch (SQLException e) {
-            System.out.println("error de select");
         }
-      return DT;
+        return DT;
+        
     }
     //metodo limpiar tabla
     void LimpiarTabla() {
@@ -52,21 +90,7 @@ public class reporteGanancias extends javax.swing.JInternalFrame {
         DT.setColumnCount(0);
     }
     
-    //numero de productos vendidos
-    public void numProdc(){
-        String SQL_sel = "SELECT dv.IdProducto, dv.Cantidad FROM detalle_ventas dv";
-        //variable guarda lo que trae la consulta
-        int totalVentas = 0;
-        try {
-            ps = con.getConnection().prepareStatement(SQL_sel);
-            RS = ps.executeQuery();
-            while (RS.next()) {                
-                totalVentas = RS.getInt(1);
-            }
-        } catch (SQLException ex) {
-            System.out.println("No se saco el total de ventas");
-        }
-    }
+    
     
 
     @SuppressWarnings("unchecked")
@@ -225,6 +249,8 @@ public class reporteGanancias extends javax.swing.JInternalFrame {
        LimpiarTabla();
        //aqui mostarmos los productos en tabla
        tablaRG.setModel(getDatos3());
+       //limpiar el textfield
+       txtFechaInicio.setText("");
     }//GEN-LAST:event_btnAcceptActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed

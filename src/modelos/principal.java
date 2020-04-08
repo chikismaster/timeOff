@@ -95,7 +95,7 @@ public class principal extends javax.swing.JFrame {
         ventas.setText("Ventas");
 
         genera_ventas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/ticket.png"))); // NOI18N
-        genera_ventas.setText("GerenteVenta");
+        genera_ventas.setText("Generar Venta");
         genera_ventas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 genera_ventasActionPerformed(evt);
@@ -103,7 +103,8 @@ public class principal extends javax.swing.JFrame {
         });
         ventas.add(genera_ventas);
 
-        genera_abono.setText("GeneraAbono");
+        genera_abono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/abono3.png"))); // NOI18N
+        genera_abono.setText("Generar Abono");
         genera_abono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 genera_abonoActionPerformed(evt);
@@ -158,7 +159,7 @@ public class principal extends javax.swing.JFrame {
         jMenu4.add(jMenuItem7);
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/rg2.png"))); // NOI18N
-        jMenuItem3.setText("Reporte ganancias");
+        jMenuItem3.setText("Reporte de ganancias");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -171,7 +172,8 @@ public class principal extends javax.swing.JFrame {
         corteVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/abono.png"))); // NOI18N
         corteVenta.setText("Corte Ventas");
 
-        jMenuItem1.setText("inicial");
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/corteini3.png"))); // NOI18N
+        jMenuItem1.setText("Corte Inicial");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
@@ -179,7 +181,8 @@ public class principal extends javax.swing.JFrame {
         });
         corteVenta.add(jMenuItem1);
 
-        jMenuItem2.setText("corte final");
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cortefin.png"))); // NOI18N
+        jMenuItem2.setText("Corte Final");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);

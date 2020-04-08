@@ -76,6 +76,15 @@ public class login extends javax.swing.JFrame {
             }
         });
 
+        txtNombre.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNombreActionPerformed(evt);
+            }
+        });
+
+        txtcontra.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/log1.png"))); // NOI18N
 
         tres.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
@@ -422,6 +431,10 @@ public class login extends javax.swing.JFrame {
         String dos = "6";
         txtcontra.setText(acu+dos);
     }//GEN-LAST:event_seisActionPerformed
+
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNombreActionPerformed
     
     
     
