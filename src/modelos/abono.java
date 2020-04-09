@@ -408,9 +408,19 @@ public class abono extends javax.swing.JInternalFrame {
 
     private void RealizarAbonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarAbonoActionPerformed
         // TODO add your handling code here:
+        String celular = txtCelularCliente.getText().toString();
+        String idClie=id_cliente(celular);
+        double adeuda = monto(idClie);
+        txtNombreCliente.setText(nom_cliente(celular));
+        if (adeuda==0){
+            JOptionPane.showMessageDialog(null, "QUE NO ADEUDA NADA MAZETON");
+        }
+        else{
         insertar_abono();
         JOptionPane.showMessageDialog(null, "Se genero Abono");
         dispose();
+        }
+        
         //JOptionPane.showMessageDialog(null, "si jalo el boton!!");
     }//GEN-LAST:event_RealizarAbonoActionPerformed
 
@@ -434,7 +444,7 @@ public class abono extends javax.swing.JInternalFrame {
         double adeuda = monto(idClie);
         txtNombreCliente.setText(nom_cliente(celular));
         if (adeuda==0){
-            txtAdeudo.setText("No adeuda");
+            txtAdeudo.setText("No adeuda nada");
         }
         else{
         txtAdeudo.setText("$"+adeuda);
