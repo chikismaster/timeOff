@@ -14,12 +14,16 @@ public class conexion {
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String user = "root";
     private static final String password = "";
-    private static final String url = "jdbc:mysql://localhost:3306/db_timeoff";
+    private static final String url = "jdbc:mysql://localhost:3306/db_tester";
     */
+    //conexion nube
+    
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String user = "uwxe4zfnuzulaykh";
     private static final String password = "nOwtgWhZa16iA9deHx4D";
     private static final String url = "jdbc:mysql://b7sis9pkpmxjxql3njhz-mysql.services.clever-cloud.com/b7sis9pkpmxjxql3njhz";
+    
+    //bandera para la conexion
     public static boolean cam = false;
     
     public conexion() {

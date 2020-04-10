@@ -474,9 +474,6 @@ public class venta extends javax.swing.JInternalFrame {
         btnCancelar = new javax.swing.JButton();
 
         setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        setClosable(true);
-        setIconifiable(true);
-        setMaximizable(true);
         setTitle("venta");
 
         jPanel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
