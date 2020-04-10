@@ -31,6 +31,10 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         mostar_datos();
         //agregamos la fecha
         fechahoy();
+        //limpimos tabla antes de usarla
+        LimpiarTabla();
+        //llamamos a la tabla de ticket
+        tablaTicket.setModel(getDatos3());
     }
     
     //************************METODOS DB****************************************
@@ -61,8 +65,7 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         txtVendedor.setText(lolo);
     }
     
-    
-    
+    //la fecha de hoy
     public void fechahoy(){
         Date fecha = new Date();
         
@@ -85,6 +88,47 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         
     }
     
+    //**********************TABLA***************************************************
+    private DefaultTableModel setTitutlos3(){
+        DT.addColumn("Productos");
+        DT.addColumn("Cantidad");
+        DT.addColumn("Ganancia");
+        return DT;
+    }
+    private DefaultTableModel getDatos3(){
+        //usamos el folio para realizar asi la busqueda en la DB
+        String folio = String.valueOf(venta.ns);
+        //consulta sql
+        String SQL_SELECT = "SELECT p.Nombres,dv.Cantidad,dv.PrecioVenta FROM ventas v JOIN detalle_ventas dv ON v.IdVentas=dv.IdVentas JOIN producto p ON p.IdProducto=dv.IdProducto WHERE v.NumeroSerie = 16";
+        try {
+            setTitutlos3();
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            RS = ps.executeQuery();
+            Object[] fila = new Object[3];
+            while (RS.next()){
+                fila[0] = RS.getString(1);
+                fila[1] = RS.getInt(2);
+                fila[2] = RS.getDouble(2);
+                DT.addRow(fila);
+            }
+            //System.out.println("si hizo el desmadre");
+        } catch (SQLException e) {
+            System.out.println("error en la tabla de ticket");
+        }
+        
+        return DT;
+        
+    }
+    //metodo limpiar tabla
+    void LimpiarTabla() {
+        for (int i = 0; i < DT.getRowCount(); i++) {
+            DT.removeRow(i);
+            i = i - 1;
+        }
+        DT.setColumnCount(0);
+    }
+    
+    
     
     
     @SuppressWarnings("unchecked")
@@ -102,22 +146,30 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtFolio = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaTicket = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Arial Black", 0, 20)); // NOI18N
         jLabel1.setText("Ticket de Venta");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        txtFecha.setBackground(new java.awt.Color(0, 0, 0));
+        txtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txt1.setText("Fecha");
 
         jLabel4.setText("Cliente");
 
         txtNombre.setBackground(new java.awt.Color(255, 255, 255));
+        txtNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setText("vendedor:");
+
+        txtVendedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -181,16 +233,36 @@ public class Impresion extends javax.swing.JPanel implements Printable {
                 .addContainerGap())
         );
 
+        tablaTicket.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tablaTicket);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 11, Short.MAX_VALUE)
+                        .addComponent(jLabel1)
+                        .addGap(12, 12, 12))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,9 +271,11 @@ public class Impresion extends javax.swing.JPanel implements Printable {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(31, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -213,6 +287,8 @@ public class Impresion extends javax.swing.JPanel implements Printable {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tablaTicket;
     private javax.swing.JLabel txt1;
     private javax.swing.JLabel txtFecha;
     private javax.swing.JLabel txtFolio;
