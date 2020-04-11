@@ -207,9 +207,11 @@ public class principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    //boton de ayuda
     private void btn_ayudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ayudaActionPerformed
         // TODO add your handling code here:
+        ayuda ay = new ayuda();
+        CentrarVentana(ay);
     }//GEN-LAST:event_btn_ayudaActionPerformed
 
     private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
