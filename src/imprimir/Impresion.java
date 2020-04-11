@@ -99,7 +99,7 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         //usamos el folio para realizar asi la busqueda en la DB
         String folio = String.valueOf(venta.ns);
         //consulta sql
-        String SQL_SELECT = "SELECT p.Nombres,dv.Cantidad,dv.PrecioVenta FROM ventas v JOIN detalle_ventas dv ON v.IdVentas=dv.IdVentas JOIN producto p ON p.IdProducto=dv.IdProducto WHERE v.NumeroSerie = 16";
+        String SQL_SELECT = "SELECT p.Nombres,dv.Cantidad,dv.PrecioVenta FROM ventas v JOIN detalle_ventas dv ON v.IdVentas=dv.IdVentas JOIN producto p ON p.IdProducto=dv.IdProducto WHERE v.NumeroSerie = "+folio+"";
         try {
             setTitutlos3();
             ps = con.getConnection().prepareStatement(SQL_SELECT);
@@ -158,18 +158,14 @@ public class Impresion extends javax.swing.JPanel implements Printable {
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txtFecha.setBackground(new java.awt.Color(0, 0, 0));
-        txtFecha.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         txt1.setText("Fecha");
 
         jLabel4.setText("Cliente");
 
         txtNombre.setBackground(new java.awt.Color(255, 255, 255));
-        txtNombre.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jLabel2.setText("vendedor:");
-
-        txtVendedor.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
