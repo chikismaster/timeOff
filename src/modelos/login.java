@@ -27,6 +27,7 @@ public class login extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         txtNombre.setText("");
         txtcontra.setText("");
+        validar_conexion();
     }
 
     @SuppressWarnings("unchecked")
@@ -332,11 +333,28 @@ public class login extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
     
+    public void validar_conexion(){
+        boolean chi = con.sijalo();
+      
+        if (chi) {
+            System.out.println("..");
+            
+        }else{
+            error_db ed = new error_db();
+            ed.setVisible(true);
+            System.out.println("no tonto");
+            dispose();
+            //System.exit(0);
+        }
+    }
+    
     public void cambiar_pag(){
         principal uno=new principal();
         uno.setVisible(true);
         dispose();
     }
+    
+    
     
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
         String nom = txtNombre.getText().toString();
