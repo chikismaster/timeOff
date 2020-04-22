@@ -25,8 +25,8 @@ public class login extends javax.swing.JFrame {
         initComponents();
         ps = null;
         this.setLocationRelativeTo(null);
-        txtNombre.setText("");
-        txtcontra.setText("");
+        txtNombre.setText("mc");
+        txtcontra.setText("123");
         validar_conexion();
     }
 

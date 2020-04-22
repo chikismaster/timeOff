@@ -30,6 +30,11 @@ public class venta extends javax.swing.JInternalFrame {
     private static int idventas = 0;
     private static int band = 0;
     public static String nom_cliente ="";
+    //variables glob para funcionar opcion "quitar"
+    private static String quitar = ""; //variable para guaradr el id del prod a quitar
+    private static double restartotal = 0; 
+    private static int quitados_stock = 0;
+    
     //constructor de venta
     public venta() {
         ps = null;
@@ -432,6 +437,38 @@ public class venta extends javax.swing.JInternalFrame {
         }
     }
     
+    //------------------FUNCIONES PARA BOTON QUITAR-----------------------------
+    //stock que tiene ese producto para sumarlo
+    public int total_stock(String id_detalleventa){
+        int stock_total = 0;
+        //hacemos la consulta guardando lo que regresa
+        String SQL_select = "SELECT p.Stock FROM producto p JOIN detalle_ventas dv ON p.IdProducto= dv.IdProducto WHERE dv.IdDetalleVentas = "+id_detalleventa+"";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                stock_total = RS.getInt(1);
+                System.out.println("stock total-->"+stock_total);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no funciono el regresar stock");
+        }
+        return stock_total;
+    }
+    //regresamos el stock de los cancelados y que quitamos para que vuelva ala normalidad
+    public void regresar_stock(int numero_stocksumar, String id_detalleventa){
+        int totalstock = total_stock(id_detalleventa);
+        totalstock = totalstock+numero_stocksumar;
+        System.out.println("total a act stock-->"+totalstock);
+        String SQL_UPDATE = "UPDATE producto p  JOIN detalle_ventas dv ON p.IdProducto=dv.IdProducto SET p.Stock = "+totalstock+" WHERE dv.IdDetalleVentas = "+id_detalleventa+"";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_UPDATE);
+            ps.execute();
+           
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -463,6 +500,8 @@ public class venta extends javax.swing.JInternalFrame {
         jLabel8 = new javax.swing.JLabel();
         txtCodProd = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        txtQuitar = new javax.swing.JTextField();
+        jButton4 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -631,6 +670,25 @@ public class venta extends javax.swing.JInternalFrame {
             }
         });
 
+        txtQuitar.setEditable(false);
+        txtQuitar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtQuitar.setForeground(new java.awt.Color(0, 51, 255));
+        txtQuitar.setCaretColor(new java.awt.Color(0, 51, 255));
+        txtQuitar.setDisabledTextColor(new java.awt.Color(0, 51, 204));
+        txtQuitar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQuitarActionPerformed(evt);
+            }
+        });
+
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
+        jButton4.setText("Quitar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -639,22 +697,25 @@ public class venta extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel10)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtCodCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(txtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel10)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCodCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                    .addComponent(txtCantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                    .addComponent(txtPrecio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)))
+                            .addComponent(txtQuitar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(11, 11, 11)
@@ -715,7 +776,9 @@ public class venta extends javax.swing.JInternalFrame {
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(txtVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtQuitar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -829,7 +892,7 @@ public class venta extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
-    //********************************BOTONES DE INTERFAZ*****************************************************************
+//********************************BOTONES DE INTERFAZ*****************************************************************
     
     //boton buscar cliente
     private void btnBuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarClienteActionPerformed
@@ -922,6 +985,7 @@ public class venta extends javax.swing.JInternalFrame {
             in_deta_venta();
             //total final a pagar
             String totfin = String.valueOf(totalpagar());
+            //se actualiza el textfield de pagar
             txtTotalPagar.setText(totfin);
             //actualizar stock
             act_stock();
@@ -940,7 +1004,7 @@ public class venta extends javax.swing.JInternalFrame {
         txtProducto.setText("");
         txtPrecio.setText(""); 
     }
-    //boton final de generar venta
+    //boton final de generar venta con tipo de pago 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
         nom_cliente = txtCliente.getText().toString();
         //definimos la variable que sera tipo de pago
@@ -977,14 +1041,17 @@ public class venta extends javax.swing.JInternalFrame {
         
         
     }//GEN-LAST:event_btnGenerarActionPerformed
-
+    //se selecciona un dato de la tabla
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        //seleccionamos la fila que dimos click
         int fila = jTable1.getSelectedRow();
-        
+        //guardamos el numero de tipo de tabla que es
         int numcol = jTable1.getColumnCount();
-        
+        //imprimimos para ver el numero de tabla que es
         System.out.println(numcol);
-        
+        //para si entra en el 4 (guarde total)
+        int totalprod = 0;
+        //si es 5 es la tabla "cliente"
         if (numcol == 5) {
             String id = jTable1.getValueAt(fila, 0).toString();
             String dni = jTable1.getValueAt(fila,1).toString();
@@ -994,7 +1061,7 @@ public class venta extends javax.swing.JInternalFrame {
             
             txtCodCliente.setText(dni);
             txtCliente.setText(nom);
-            
+        //si es 7 es la tabla "venta"
         }else if(numcol == 7){
             /*
             String idvent = jTable1.getValueAt(fila, 0).toString();
@@ -1004,12 +1071,27 @@ public class venta extends javax.swing.JInternalFrame {
             String fecvent = jTable1.getValueAt(fila, 4).toString();
             String monto = jTable1.getValueAt(fila, 5).toString();
             String estad = jTable1.getValueAt(fila, 6).toString();
-            */
-            
+            */ 
+        //si es 4 es la tabla "producto comprados o agregados
+        }else if (numcol == 4) {
+            String IdDetalleVentas = jTable1.getValueAt(fila, 0).toString();
+            String producto = jTable1.getValueAt(fila,1).toString();
+            String Cantidad = jTable1.getValueAt(fila, 2).toString();
+            String PrecioVenta = jTable1.getValueAt(fila, 3).toString();
+            //************METODOS PARA BOTON QUITAR*****************************
+            //mostramos el nombre del producto que quitaremos
+            txtQuitar.setText(producto);
+            //definimos su id para quitarlo en una funcion y lo imprimimos
+            quitar = IdDetalleVentas;
+            //guardamos el dinero que quitaremos para que No se sume en "total"
+            restartotal = Double.parseDouble(PrecioVenta);
+            //guardamos la cantidad de productos en una var global para act stock
+            quitados_stock = Integer.parseInt(Cantidad);
         }
+        
         //jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jTable1MouseClicked
-
+    
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
         
         String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")";
@@ -1044,6 +1126,49 @@ public class venta extends javax.swing.JInternalFrame {
     private void txtStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtStockActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStockActionPerformed
+
+    private void txtQuitarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQuitarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtQuitarActionPerformed
+    //boton "quitar" producto agregado (por si se arrepintio)
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        //validamos que exista uno seleccionado
+        String validarsel = txtQuitar.getText().toString();
+        if (!validarsel.equals("")) {
+        /*  1.-regresamos a stock los productos cancelados (llamando funcion)
+            2.-eliminamos el producto cancelado de detalle de ventas
+            3.-actualizamos lo que ahora tendra que pagar (textfiel totalpagar)
+            4.-refrescamos la tabla del total a pagar */
+            //1.-regresamos el stock a productos que tenaian
+            regresar_stock(quitados_stock, quitar);
+            //2.-usamos e id de el producto que eliminaremos que es var global
+            String SQL_elim = "DELETE FROM detalle_ventas WHERE IdDetalleVentas = '"+quitar+"'";      
+            try {
+                ps = con.getConnection().prepareStatement(SQL_elim);
+                ps.execute();
+                System.out.println("si elimino producto arrepentido");
+            } catch (SQLException ex) {
+                System.out.println("no elimina detalle_venta (quitar)");
+            }
+            //3.-actualizamos el textfiel total a pagar
+            double totalhay = Double.parseDouble(txtTotalPagar.getText().toString());//lo que hay en double
+            //3.-restamos el producto que se elimino 
+            totalhay = totalhay - restartotal;
+            //3.-convertimos en string lo que se eliminara y guardara en total
+            String totalhayfinal = String.valueOf(totalhay);
+            //3.-actualizar el total a pagar
+            txtTotalPagar.setText(totalhayfinal);
+            //4.-refrescar tabla
+            LimpiarTabla();
+            //4.-mostramos de nuevo la tabla
+            jTable1.setModel(getDatos3());
+            //4.-limpiamos textfiel del producto a quitar
+            txtQuitar.setText("");
+        }else{
+            JOptionPane.showMessageDialog(this, "no a seleccionado ningun producto a quitar");
+        }
+        
+    }//GEN-LAST:event_jButton4ActionPerformed
     
     public void del_ventas(){
         String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";
@@ -1064,6 +1189,7 @@ public class venta extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnGenerar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1089,6 +1215,7 @@ public class venta extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtPrecio;
     private javax.swing.JTextField txtProducto;
+    private javax.swing.JTextField txtQuitar;
     private javax.swing.JTextField txtSerie;
     private javax.swing.JTextField txtStock;
     private javax.swing.JTextField txtTotalPagar;
