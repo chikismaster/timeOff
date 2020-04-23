@@ -10,7 +10,7 @@ public class principal extends javax.swing.JFrame {
     //variables globales
     public static String nom_gfe;
     //definimos el nombre del superusario va a igualar
-    public static String superuser = "mc";
+    public static String superuser = "timeoff";
     
     public principal() {
         initComponents();

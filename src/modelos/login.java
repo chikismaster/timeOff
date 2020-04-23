@@ -25,9 +25,9 @@ public class login extends javax.swing.JFrame {
         initComponents();
         ps = null;
         this.setLocationRelativeTo(null);
-        txtNombre.setText("mc");
-        txtcontra.setText("123");
-        validar_conexion();
+        txtNombre.setText("timeoff");
+        txtcontra.setText("3200");
+        //validar_conexion();
     }
 
     @SuppressWarnings("unchecked")
@@ -332,20 +332,20 @@ public class login extends javax.swing.JFrame {
         con.desconectar();
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+    //----------FUNCION PARA EVALUAR QUE LA DB ESTA ENCENDIDA-------------------
     public void validar_conexion(){
         boolean chi = con.sijalo();
       
         if (chi) {
             System.out.println("..");
-            
         }else{
-            error_db ed = new error_db();
-            ed.setVisible(true);
-            System.out.println("no tonto");
-            dispose();
-            //System.exit(0);
+            cerrar_pagina();
         }
+    }
+    public void cerrar_pagina(){
+        error_db ed = new error_db();
+        ed.setVisible(true);    
+        dispose();
     }
     
     public void cambiar_pag(){
@@ -357,10 +357,13 @@ public class login extends javax.swing.JFrame {
     
     
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
+        //se valida al querer entrar que la db sirva
+        validar_conexion();
+        //guardamos los textfield en var del login
         String nom = txtNombre.getText().toString();
         String dni = txtcontra.getText().toString();
         String res_nom = null;
-        
+        //guardamos nombre del usuario como token 
         a = txtNombre.getText().toString();
         
         String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"'";
@@ -382,8 +385,7 @@ public class login extends javax.swing.JFrame {
             
         } catch (SQLException ex) {
             System.out.println("no se encotro");
-        }
-        
+        }        
     }//GEN-LAST:event_okActionPerformed
 
     private void sieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sieteActionPerformed
