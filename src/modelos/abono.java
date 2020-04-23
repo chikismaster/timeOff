@@ -19,20 +19,19 @@ import imprimir.imprimir2;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 
-/**
- *
- * @author Gabriel
- */
+
 public class abono extends javax.swing.JInternalFrame {
     private PreparedStatement ps;
     private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
-    /**
-     * Creates new form abono
-     */
+    
+    //variables globales para buscar cliente
+    public static String numeroCliente = "";
+    public static String nombreCliente = "";
+    
     public abono() {
-        ps=null;
+        ps = null;
         initComponents();
         System.out.println(fechahoy());
         //esta clase sirve para ver si se cerro desconectar de db
@@ -45,7 +44,59 @@ public class abono extends javax.swing.JInternalFrame {
         });
     }
     
- //funcion que devuelve la fecha de hoy en string
+    //******************TABLA BUSCAR CLIENTE************************************
+    private void listar(){
+        tabla_clientes.setModel(getDatos());
+    }
+    //columnas tabla
+    private DefaultTableModel setTitutlos(){
+        DT.addColumn("IdCliente");
+        DT.addColumn("Dni");
+        DT.addColumn("Nombres");
+        DT.addColumn("Direccion");
+        DT.addColumn("Estado");
+        DT.addColumn("adeudo");
+        return DT;
+    }
+    //muestra columnas
+    private DefaultTableModel getDatos(){
+        setTitutlos();
+        if (!nombreCliente.equals("")) {
+            nombreCliente = "%"+nombreCliente+"%";
+        }
+        if (!numeroCliente.equals("")) {
+           numeroCliente = "%"+numeroCliente+"%" ;
+        }
+        String SQL_SELECT = "SELECT * FROM `cliente` WHERE Celular LIKE '"+numeroCliente+"' OR Nombres LIKE '"+nombreCliente+"'";
+        //String SQL_SELECT = "SELECT * FROM cliente";
+        try {
+            
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            RS = ps.executeQuery();
+            Object[] fila = new Object[6];
+            while (RS.next()){
+                fila[0] = RS.getInt(1);
+                fila[1] = RS.getString(2);
+                fila[2] = RS.getString(3);
+                fila[3] = RS.getString(4);
+                fila[4] = RS.getString(5);
+                fila[5] = RS.getString(6);
+                DT.addRow(fila);
+            }
+        } catch (SQLException e) {
+            System.out.println("error mostrar ");
+        }
+      return DT;
+    }
+    //limpia tabla
+    void LimpiarTabla() {
+        for (int i = 0; i < DT.getRowCount(); i++) {
+            DT.removeRow(i);
+            i = i - 1;
+        }
+    }
+    
+    //funcion que devuelve la fecha de hoy en string
     public String fechahoy(){
         Date fecha = new Date();
         
@@ -86,6 +137,7 @@ public class abono extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "no guardo en abono");
         }     
     }
+    
     //actualiza el monto de adeudo
     public void actualizaradeudo(String idCliente, String abono){
         double adeuda = monto(idCliente);
@@ -104,6 +156,7 @@ public class abono extends javax.swing.JInternalFrame {
             System.out.println("no sirve la actualizar");
         }
     }
+    
     //devuelve el monto que adeuda 
     public double monto(String idClie){
         String SQL_select = "SELECT adeudo FROM `cliente` WHERE idCliente = '"+idClie+"'";
@@ -132,8 +185,9 @@ public class abono extends javax.swing.JInternalFrame {
         }
     }
     
-     //Trae el id del cliente
-        public String id_cliente(String celular){
+    //Trae el id del cliente buscando por celular o nombre
+    public String id_cliente(String celular){
+        
         String SQL_select = "SELECT IdCliente FROM `cliente` WHERE Celular = '"+celular+"'";
         String lolo = "";
         try {
@@ -145,11 +199,12 @@ public class abono extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "no encuentra Celular de cliente");
         }
-        
+
         return lolo;
     }
-             //Trae el nombre del cliente
-        public String nom_cliente(String celular){
+    
+    //Trae el nombre del cliente
+    public String nom_cliente(String celular){
         String SQL_select = "SELECT Nombres FROM `cliente` WHERE Celular = '"+celular+"'";
         String lolo = "";
         try {
@@ -171,7 +226,6 @@ public class abono extends javax.swing.JInternalFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         txtFecha = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
@@ -180,11 +234,15 @@ public class abono extends javax.swing.JInternalFrame {
         txtCelularCliente = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtNombreCliente = new javax.swing.JTextField();
+        btnBuscar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         RealizarAbono = new javax.swing.JButton();
         VerAdeudo = new javax.swing.JButton();
         txtAdeudo = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla_clientes = new javax.swing.JTable();
 
         setClosable(true);
         setIconifiable(true);
@@ -200,10 +258,6 @@ public class abono extends javax.swing.JInternalFrame {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel12.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel12.setText("Abono");
-
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel13.setText("Tel: 312-135-55-79");
 
         txtFecha.setEditable(false);
         txtFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -221,13 +275,12 @@ public class abono extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(237, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtFecha))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(238, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,8 +289,6 @@ public class abono extends javax.swing.JInternalFrame {
                 .addComponent(jLabel11)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12)
-                .addGap(11, 11, 11)
-                .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -255,7 +306,7 @@ public class abono extends javax.swing.JInternalFrame {
         });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel15.setText("telefono del Cliente");
+        jLabel15.setText("telefono");
 
         txtCelularCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -264,9 +315,8 @@ public class abono extends javax.swing.JInternalFrame {
         });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel2.setText("Nombre Cliente");
+        jLabel2.setText("Nombre");
 
-        txtNombreCliente.setEditable(false);
         txtNombreCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtNombreCliente.setForeground(new java.awt.Color(0, 51, 255));
         txtNombreCliente.setCaretColor(new java.awt.Color(0, 51, 255));
@@ -274,6 +324,13 @@ public class abono extends javax.swing.JInternalFrame {
         txtNombreCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreClienteActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
             }
         });
 
@@ -295,7 +352,9 @@ public class abono extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtNombreCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)))
+                        .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -307,17 +366,20 @@ public class abono extends javax.swing.JInternalFrame {
                         .addComponent(jLabel15)
                         .addComponent(txtCelularCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel2))
-                    .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(32, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         RealizarAbono.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        RealizarAbono.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/abono4.png"))); // NOI18N
         RealizarAbono.setText("Abonar");
         RealizarAbono.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -326,6 +388,7 @@ public class abono extends javax.swing.JInternalFrame {
         });
 
         VerAdeudo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        VerAdeudo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/buscar.png"))); // NOI18N
         VerAdeudo.setText("Ver Adeudo");
         VerAdeudo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -353,8 +416,8 @@ public class abono extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(RealizarAbono, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addComponent(RealizarAbono)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(VerAdeudo)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
@@ -374,6 +437,37 @@ public class abono extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        tabla_clientes.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tabla_clientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabla_clientesMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tabla_clientes);
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -383,7 +477,8 @@ public class abono extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -391,9 +486,11 @@ public class abono extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -412,7 +509,7 @@ public class abono extends javax.swing.JInternalFrame {
         double adeuda = monto(idClie);
         txtNombreCliente.setText(nom_cliente(celular));
         if (adeuda==0){
-            JOptionPane.showMessageDialog(null, "QUE NO ADEUDA NADA MAZETON");
+            JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
         }
         else{
         insertar_abono();
@@ -433,41 +530,80 @@ public class abono extends javax.swing.JInternalFrame {
 
     private void txtAdeudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAdeudoActionPerformed
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_txtAdeudoActionPerformed
 
     private void VerAdeudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_VerAdeudoActionPerformed
-        // TODO add your handling code here:
-        String celular = txtCelularCliente.getText().toString();
-        String idClie=id_cliente(celular);
-        double adeuda = monto(idClie);
-        txtNombreCliente.setText(nom_cliente(celular));
-        if (adeuda==0){
-            txtAdeudo.setText("No adeuda nada");
+
+        if ((txtCelularCliente.getText().equals("")) && (txtNombreCliente.getText().equals(""))) {
+            JOptionPane.showMessageDialog(null, "ingresa al menos un campo a buscar");
+        }else{
+            //manda el celular para saber el id
+            String celular = txtCelularCliente.getText().toString();
+            String idClie=id_cliente(celular);
+            double adeuda = monto(idClie);
+            txtNombreCliente.setText(nom_cliente(celular));
+            if (adeuda==0){
+                txtAdeudo.setText("No adeuda nada");
+            }
+            else{
+            txtAdeudo.setText("$"+adeuda);
+            }
         }
-        else{
-        txtAdeudo.setText("$"+adeuda);
-        }
+        
     }//GEN-LAST:event_VerAdeudoActionPerformed
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtFechaActionPerformed
 
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        //pasamos los textfield a var globales
+        nombreCliente = txtNombreCliente.getText();
+        numeroCliente = txtCelularCliente.getText();
+        
+        if ((nombreCliente.equals("")) && (numeroCliente.equals(""))) {
+            JOptionPane.showMessageDialog(null, "ingresa al menos un campo a buscar");
+        }else{
+            listar();
+            //seleccionar id de la tabla
+            //int fila = buscaCliente.getSelectedRow();
+            //int id = Integer.parseInt(buscaCliente.getValueAt(fila, 0).toString());
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void tabla_clientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabla_clientesMouseClicked
+        int fila = tabla_clientes.getSelectedRow();
+        
+        //int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
+        String id = tabla_clientes.getValueAt(fila, 0).toString();
+        String dni = tabla_clientes.getValueAt(fila,1).toString();
+        String nom = tabla_clientes.getValueAt(fila, 2).toString();
+        String dir = tabla_clientes.getValueAt(fila, 3).toString();
+        int estado = Integer.parseInt(tabla_clientes.getValueAt(fila, 4).toString());
+        
+        
+        txtCelularCliente.setText(dni);
+        txtNombreCliente.setText(nom);
+    }//GEN-LAST:event_tabla_clientesMouseClicked
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton RealizarAbono;
     private javax.swing.JButton VerAdeudo;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tabla_clientes;
     private javax.swing.JTextField txtAdeudo;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCelularCliente;
