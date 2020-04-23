@@ -21,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import imprimir.imprimir2;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 
 /**
@@ -45,6 +47,15 @@ public class corteFinal extends javax.swing.JInternalFrame {
         System.out.println(fechahoy());
         //para obtener vendedor usuario
         txtVendedor.setText(login.a);
+        //esta clase sirve para ver si se cerro desconectar de db
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("se cerro crotefinal");
+                con.desconectar();
+                // do something  
+            }
+        });
+        
     }
      //funcion que devuelve la fecha de hoy en string
     public String fechahoy(){

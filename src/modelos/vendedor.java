@@ -8,13 +8,15 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 
 public class vendedor extends javax.swing.JInternalFrame {
 
     private PreparedStatement ps;
-    private conexion con;
+    private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     private String SQL_select = "select * from vendedor";
@@ -23,13 +25,21 @@ public class vendedor extends javax.swing.JInternalFrame {
         initComponents();
         ps = null;
         listar();
+        //esta clase sirve para ver si se cerro desconectar de db
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("se cerro vendedor");
+                con.desconectar();
+                // do something  
+            }
+        });
     }
+    //*******************TABLA VENDEDOR****************************************
     private void listar(){
         jTable1.setModel(getDatos());
     }
-    
+    //columnas tabla vendedor
     private DefaultTableModel setTitutlos(){
-        con = new conexion();
         DT.addColumn("IdVendedor");
         DT.addColumn("Contra");
         DT.addColumn("Nombres");
@@ -39,8 +49,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         
         return DT;
     }
-    
-    
+    //mostrar en tabla
     private DefaultTableModel getDatos(){  
         try {
             setTitutlos();
@@ -56,7 +65,7 @@ public class vendedor extends javax.swing.JInternalFrame {
                 fila[5] = RS.getString(6);
                 DT.addRow(fila);
             }
-            System.out.println("si hizo el desmadre");
+            
         } catch (SQLException e) {
             System.out.println("error de select");
         }
@@ -83,7 +92,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         }
       return DT;
     }
-    
+   
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
             DT.removeRow(i);
@@ -336,19 +345,19 @@ public class vendedor extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
+        //se guarda var para usar de los textfield
         String dn = txtDni.getText().toString();
         String nom = txtNombres.getText().toString();
         String tel = txtTelefono.getText().toString();
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
-        
+        //imprimimos usario
         System.out.println(usu);
-        
+        //validamos que ingresen todos los campos
         if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
-        
+            //una vez validado se hace el insert
             String SQL_INSERT = "INSERT INTO vendedor (Dni,Nombres,Telefono,Estado,User) values('"+dn+"','"+nom+"','"+tel+"','"+estado+"','"+usu+"')";
 
             try {
@@ -379,21 +388,22 @@ public class vendedor extends javax.swing.JInternalFrame {
         String tel = txtTelefono.getText().toString();
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
-        
-        //consulta sql
-        String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+id+"";
-        //ejecutar consulta
-        try {
-            ps = con.getConnection().prepareStatement(SQL_UPDATE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos2());
-        } catch (SQLException e) {
-            System.out.println("no sirve la actualizar");
-        }
-        
-        
+        if ((dni.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+            JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
+        }else{
+            //consulta sql
+            String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+id+"";
+            //ejecutar consulta
+            try {
+                ps = con.getConnection().prepareStatement(SQL_UPDATE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos2());
+            } catch (SQLException e) {
+                System.out.println("no sirve la actualizar");
+            }
+        }    
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed

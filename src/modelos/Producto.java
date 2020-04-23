@@ -5,12 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class Producto extends javax.swing.JInternalFrame {
     
     private PreparedStatement ps;
-    private conexion con;
+    private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     
@@ -19,13 +21,21 @@ public class Producto extends javax.swing.JInternalFrame {
         ps = null;
         setTitutlos();
         listar();
+        //esta clase sirve para ver si se cerro desconectar de db
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("se cerro producto");
+                con.desconectar();
+                // do something  
+            }
+        });
     }
+    //*********************TABLA PRODUCTO***************************************
     private void listar(){
         jTable1.setModel(getDatos());
     }
     
     private DefaultTableModel setTitutlos(){
-        con = new conexion();
         DT.addColumn("IdProducto");
         DT.addColumn("Nombres");
         DT.addColumn("Codigo_product");

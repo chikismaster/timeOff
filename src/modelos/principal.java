@@ -15,9 +15,8 @@ public class principal extends javax.swing.JFrame {
     public principal() {
         initComponents();
         this.setExtendedState(MAXIMIZED_BOTH);
-        //definimos una variable para ver superusuario
-        nom_gfe = login.a;
-        
+        //definimos una variable para ver si es superusuario
+        nom_gfe = login.a;   
     }
     
     void  CentrarVentana(JInternalFrame frame){

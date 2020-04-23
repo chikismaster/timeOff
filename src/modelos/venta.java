@@ -21,7 +21,7 @@ import imprimir.imprimir2;
 public class venta extends javax.swing.JInternalFrame {
     //variables para conexion db
     private PreparedStatement ps;
-    private conexion con;
+    private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     //variables globales
@@ -120,7 +120,6 @@ public class venta extends javax.swing.JInternalFrame {
     //********************AQUI SON SOLO TABLAS A MOSTRAR************************************************
     //titulos tabla cliente y tabla clietes
     private DefaultTableModel setTitutlos(){
-        con = new conexion();
         DT.addColumn("IdCliente");
         DT.addColumn("Dni");
         DT.addColumn("Nombres");
@@ -166,7 +165,6 @@ public class venta extends javax.swing.JInternalFrame {
     
     //titulos tabla venta y tabla devuelve por folio o num serie
     private DefaultTableModel setTitutlos2(){
-        con = new conexion();
         DT.addColumn("IdVentas");
         DT.addColumn("IdCliente");
         DT.addColumn("IdVendedor");
@@ -207,7 +205,6 @@ public class venta extends javax.swing.JInternalFrame {
     }
     //tabla de detalle_ventas
     private DefaultTableModel setTitutlos3(){
-        con = new conexion();
         DT.addColumn("IdDetalleVentas");
         DT.addColumn("producto");
         DT.addColumn("Cantidad");
@@ -1055,36 +1052,45 @@ public class venta extends javax.swing.JInternalFrame {
     }
     //boton final de generar venta con tipo de pago 
     private void btnGenerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGenerarActionPerformed
-        nom_cliente = txtCliente.getText().toString();
-        //definimos la variable que sera tipo de pago
-        String[] options = {"Tarjeta", "Efectivo", "Abono"};
-        int seleccion = JOptionPane.showOptionDialog(null, "Es necesario que seleccione una opcion", "Titulo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-        String tpago;
-        //
-        if (seleccion == 0) {
-            JOptionPane.showMessageDialog(this, "pago con Tarjeta");
-            tpago = "t";
-            actu_venta(tpago);
-            imprimir2 imp = new imprimir2();
-            imp.setVisible(true);
-            dispose();
-        }else if (seleccion == 1){
-            JOptionPane.showMessageDialog(this, "pago con Efectivo");
-            tpago = "e";
-            actu_venta(tpago);
-            imprimir2 imp = new imprimir2();
-            imp.setVisible(true);
-            dispose();
-        }else if (seleccion == 2){
-            JOptionPane.showMessageDialog(this, "pago en Abono");
-            tpago = "a";
-            actu_venta(tpago);
-            imprimir2 imp = new imprimir2();
-            imp.setVisible(true);
-            dispose();
-        }else {
-            JOptionPane.showMessageDialog(this, "cancelo");
+        //validamos que no valla vacio 
+        String hay_compra = txtTotalPagar.getText();
+        if (hay_compra.equals("0") || hay_compra.equals("0.0")) {
+            JOptionPane.showMessageDialog(this, "no se tienen productos");
+        }else{
+            //definimos nombre del cliente para mandarlo a imprimir
+            nom_cliente = txtCliente.getText().toString();
+            //definimos la variable que sera tipo de pago
+            String[] options = {"Tarjeta", "Efectivo", "Abono"};
+            int seleccion = JOptionPane.showOptionDialog(null, "Es necesario que seleccione una opcion", "Titulo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+            String tpago;
+            //
+            if (seleccion == 0) {
+                JOptionPane.showMessageDialog(this, "pago con Tarjeta");
+                tpago = "t";
+                actu_venta(tpago);
+                imprimir2 imp = new imprimir2();
+                imp.setVisible(true);
+                dispose();
+            }else if (seleccion == 1){
+                JOptionPane.showMessageDialog(this, "pago con Efectivo");
+                tpago = "e";
+                actu_venta(tpago);
+                imprimir2 imp = new imprimir2();
+                imp.setVisible(true);
+                dispose();
+            }else if (seleccion == 2){
+                JOptionPane.showMessageDialog(this, "pago en Abono");
+                tpago = "a";
+                actu_venta(tpago);
+                imprimir2 imp = new imprimir2();
+                imp.setVisible(true);
+                dispose();
+            }else {
+                JOptionPane.showMessageDialog(this, "cancelo");
+            }
         }
+        
+        
     }//GEN-LAST:event_btnGenerarActionPerformed
     //se selecciona un dato de la tabla
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -1151,6 +1157,8 @@ public class venta extends javax.swing.JInternalFrame {
         }
         //eliminamos la venta relacionadad a detalle
         del_ventas();
+        //cerramos conexion antes de salir
+        con.desconectar();
         //cerramos pantalla
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed

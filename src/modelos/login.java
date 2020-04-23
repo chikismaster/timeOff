@@ -15,7 +15,7 @@ public class login extends javax.swing.JFrame {
     public static String a;
     
     public static int dd;
-    
+    //variables de conexion a db
     private PreparedStatement ps;
     private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
@@ -347,7 +347,7 @@ public class login extends javax.swing.JFrame {
         ed.setVisible(true);    
         dispose();
     }
-    
+    //funcion cambia de page si se logea bien
     public void cambiar_pag(){
         principal uno=new principal();
         uno.setVisible(true);
@@ -355,7 +355,7 @@ public class login extends javax.swing.JFrame {
     }
     
     
-    
+    //boton aceptar y validar si esta bien el usurio
     private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
         //se valida al querer entrar que la db sirva
         validar_conexion();

@@ -1,16 +1,19 @@
 package modelos;
 
 import conexion.conexion;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class Cliente extends javax.swing.JInternalFrame {
     
     private PreparedStatement ps;
-    private conexion con;
+    private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     
@@ -19,25 +22,30 @@ public class Cliente extends javax.swing.JInternalFrame {
         ps = null;
         setTitutlos();
         listar();
+        //esta clase sirve para ver si se cerro desconectar de db
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("se cerro cliente");
+                con.desconectar();
+                // do something  
+            }
+        });
     }
-    
+    //****************TABLA CLIENTES*******************************************
     private void listar(){
         tabla_clientes.setModel(getDatos());
     }
-    
+    //columnas tabla
     private DefaultTableModel setTitutlos(){
-        con = new conexion();
         DT.addColumn("IdCliente");
         DT.addColumn("Dni");
         DT.addColumn("Nombres");
         DT.addColumn("Direccion");
         DT.addColumn("Estado");
         DT.addColumn("adeudo");
-        
-        
         return DT;
     }
-    
+    //muestra columnas
     private DefaultTableModel getDatos(){         
         String SQL_SELECT = "SELECT * FROM cliente";
         try {
@@ -54,13 +62,12 @@ public class Cliente extends javax.swing.JInternalFrame {
                 fila[5] = RS.getString(6);
                 DT.addRow(fila);
             }
-            System.out.println("si hizo el desmadre");
         } catch (SQLException e) {
-            System.out.println("error de select");
+            System.out.println("error mostrar ");
         }
       return DT;
     }
-    
+    //limpia tabla
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
             DT.removeRow(i);

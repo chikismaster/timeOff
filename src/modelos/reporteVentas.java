@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
 public class reporteVentas extends javax.swing.JInternalFrame {
@@ -22,6 +24,14 @@ public class reporteVentas extends javax.swing.JInternalFrame {
         FechaDay.setText(fechahoy());
         //agregamos la fecha
         txtFechaFin.setText(fechahoy());
+        //esta clase sirve para ver si se cerro desconectar de db
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                System.out.println("se cerro reporte de ventas");
+                con.desconectar();
+                // do something  
+            }
+        });
     }
     //funcion para obtener la fecha de hoy
     public String fechahoy(){
