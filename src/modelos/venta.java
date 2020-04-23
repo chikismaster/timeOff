@@ -381,8 +381,7 @@ public class venta extends javax.swing.JInternalFrame {
         }
         return sino;
     }
-    
-    
+       
     //total a pagar 
     public double totalpagar(){
         double totalfinal = 0;
@@ -403,7 +402,7 @@ public class venta extends javax.swing.JInternalFrame {
     
     //actualizar venta en precio
     public void actu_venta(String tpago){
-        String monto = txtTotalPagar.getText().toString();
+        String monto = txtTotalPagar.getText();
         String SQL_UPDATE = "UPDATE `ventas` SET Monto="+monto+", tipo_pago='"+tpago+"' WHERE IdVentas = "+idventas+"";
         try {
             ps = con.getConnection().prepareStatement(SQL_UPDATE);
@@ -467,6 +466,56 @@ public class venta extends javax.swing.JInternalFrame {
            
         } catch (SQLException e) {
             System.out.println("no sirve la actualizar");
+        }
+    }
+    
+    //-----------------FUNCIONES PARA BOTON CANCELAR Y SALIR--------------------
+    public void detalle_venta(){
+        //logitudes de valores
+        int pos = 0; int n =1;
+        //campos para definir la longitud del array
+        LimpiarTabla();
+        jTable1.setModel(getDatos3());
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            System.out.println("n fue veces--->"+n);
+            n++;
+        }
+        //array para guardar todos los id y stock a regresar igual
+        int stocks[];
+        stocks = new int[n];
+        String ids[];
+        ids = new String[n];
+        //var para guardar lo que trae la consulta  
+        String id_dv = "";
+        int num_stock = 0;
+        String SQL_select = "SELECT dv.IdDetalleVentas, dv.Cantidad FROM detalle_ventas dv WHERE dv.IdVentas = "+idventas+"";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            
+            while (RS.next()) {                
+                id_dv = RS.getString(1);
+                num_stock = RS.getInt(2);
+                //los agregamos al array
+                ids[pos] = id_dv;
+                stocks[pos] = num_stock;
+                //la posicion del array
+                pos++;
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "no funciono el regresar stock");
+        }
+        //metodo para recorrer el array y ingresar al metodo regresar stock
+        int j = 1;
+        for (int i = 0; i < stocks.length; i++) {
+            if (j == stocks.length) {
+                System.out.println("se acabo array");
+            }else{
+                System.out.println("los ids son-->"+ids[i]);
+                System.out.println("los stock son -->"+stocks[i]);
+                regresar_stock(stocks[i], ids[i]);
+            }
+            j++;
         }
     }
     
@@ -1036,10 +1085,6 @@ public class venta extends javax.swing.JInternalFrame {
         }else {
             JOptionPane.showMessageDialog(this, "cancelo");
         }
-        
-
-        
-        
     }//GEN-LAST:event_btnGenerarActionPerformed
     //se selecciona un dato de la tabla
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -1091,11 +1136,12 @@ public class venta extends javax.swing.JInternalFrame {
         
         //jTable1.setModel(getDatos2());
     }//GEN-LAST:event_jTable1MouseClicked
-    
+    //boton cancelar y salir
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
-        String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")";
-        
+        //funcion para regresar todo a stock al cancelar
+        detalle_venta();
+        //eliminamos los productos en tabla detalleventa 
+        String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")"; 
         try {
             ps = con.getConnection().prepareStatement(SQL_del);
             ps.execute();
@@ -1103,7 +1149,9 @@ public class venta extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             System.out.println("no elimina detalle de venta");
         }
+        //eliminamos la venta relacionadad a detalle
         del_ventas();
+        //cerramos pantalla
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
