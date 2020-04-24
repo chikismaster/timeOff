@@ -39,6 +39,7 @@ public class imprimir2 extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jButton1.setText("imprimir");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -101,6 +102,8 @@ public class imprimir2 extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        //cerramos session
+        
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 

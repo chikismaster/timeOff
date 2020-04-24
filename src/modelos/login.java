@@ -25,8 +25,8 @@ public class login extends javax.swing.JFrame {
         initComponents();
         ps = null;
         this.setLocationRelativeTo(null);
-        txtNombre.setText("timeoff");
-        txtcontra.setText("3200");
+        txtNombre.setText("");
+        txtcontra.setText("");
         //validar_conexion();
     }
 

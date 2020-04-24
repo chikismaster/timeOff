@@ -1047,50 +1047,59 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
     //boton agrega producto a ventas
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        /*
-        1.-limpiamos tablas
-        2.-checamos si stock es mayor a lo que desea
-        3.-calculamos el precio base la canntidad de productos
-        4.-verificamos que exista esa venta por el folio y si no la creamos
-        5.-insertamos el detalle de venta
-        6.-llamamos al metodo de lo total a pagar
-        7.-hablamos a la funcion de actualizar el stock
-        8.-limpiamos textfield al momento de agregar
-        */
-        LimpiarTabla();
-        //validar producto en stock
-        int cantPro = Integer.parseInt(txtCantidad.getValue().toString());
-        int cantSotck = Integer.parseInt(txtStock.getText());
-        if (cantPro <= cantSotck) {
-            JOptionPane.showMessageDialog(null, "Si se puede realizar la compra");
-            //calcula el precio
-            calcular();
-            //calamos si existe el folio de venta y si no para crearlo
-            System.out.println(exis_fol());
-            if (exis_fol() == 0) {
-                in_venta();
-                System.out.println("no existeee");
-            }
-            //llamar a insertar detalle venta
-            in_deta_venta();
-            //total final a pagar
-            String totfin = String.valueOf(totalpagar());
-            //se actualiza el textfield de pagar
-            txtTotalPagar.setText(totfin);
-            //actualizar stock
-            act_stock();
-            jTable1.setModel(getDatos3());
-            //limpiamos productos
-            limpiar_prod();
+        //validamos que exitan producto a agregar antes de todo
+        String producto_existe = txtProducto.getText();
+        if (producto_existe.equals("")) {
+            JOptionPane.showMessageDialog(null, "Seleccione producto");
         }else{
-            JOptionPane.showMessageDialog(null, "No alcanzan los productos");
-            //limpiamos productos
-            limpiar_prod();
+            /*
+            1.-limpiamos tablas
+            2.-checamos si stock es mayor a lo que desea
+            3.-calculamos el precio base la canntidad de productos
+            4.-verificamos que exista esa venta por el folio y si no la creamos
+            5.-insertamos el detalle de venta
+            6.-llamamos al metodo de lo total a pagar
+            7.-hablamos a la funcion de actualizar el stock
+            8.-limpiamos textfield al momento de agregar
+            */
+            LimpiarTabla();
+            //la cantidad de producto no puede ser menor a 1
+            int numero_product = (int) txtCantidad.getValue();            
+            //validar producto en stock
+            int cantPro = Integer.parseInt(txtCantidad.getValue().toString());
+            int cantSotck = Integer.parseInt(txtStock.getText());
+            if (cantPro <= cantSotck && numero_product > 0) {
+                JOptionPane.showMessageDialog(null, "Si se puede realizar la compra");
+                //calcula el precio
+                calcular();
+                //calamos si existe el folio de venta y si no para crearlo
+                System.out.println(exis_fol());
+                if (exis_fol() == 0) {
+                    in_venta();
+                    System.out.println("no existeee");
+                }
+                //llamar a insertar detalle venta
+                in_deta_venta();
+                //total final a pagar
+                String totfin = String.valueOf(totalpagar());
+                //se actualiza el textfield de pagar
+                txtTotalPagar.setText(totfin);
+                //actualizar stock
+                act_stock();
+                jTable1.setModel(getDatos3());
+                //limpiamos productos
+                limpiar_prod();
+            }else{
+                JOptionPane.showMessageDialog(null, "No alcanzan los productos");
+                //limpiamos productos
+                limpiar_prod();
+            }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
     
     private void limpiar_prod(){
         //limpiar textfield
+        txtStock.setText("");
         txtCodProd.setText("");
         txtProducto.setText("");
         txtPrecio.setText(""); 
