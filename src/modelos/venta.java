@@ -433,6 +433,50 @@ public class venta extends javax.swing.JInternalFrame {
         }
     }
     
+    public void act_cliente(){
+        String monto = txtTotalPagar.getText();
+        String nom=txtCliente.getText();
+        double adeuda = monto(nom);
+        double abo = Double.parseDouble(monto);
+        
+        double tot= adeuda+abo;
+        
+        String SQL_UPDATE = "UPDATE cliente SET adeudo="+tot+"WHERE Nombres = '"+nom+"'";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_UPDATE);
+            ps.execute();
+            actualizaestado(nom);
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
+    
+    //devuelve el monto que adeuda 
+    public double monto(String nom){
+        String SQL_select = "SELECT adeudo FROM `cliente` WHERE Nombres = '"+nom+"'";
+        double lolo = 0;
+        try {
+            ps = con.getConnection().prepareStatement(SQL_select);
+            RS = ps.executeQuery();
+            while (RS.next()) {                
+                lolo = RS.getDouble(1);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Cliente no encontrado");
+        }
+        return lolo;
+    }
+    
+    //actualiza estado del cliente
+    public void actualizaestado(String nom){
+        String SQL_UPDATE = "UPDATE `cliente` SET Estado='1' WHERE Nombres = '"+nom+"'";
+        try {
+            ps = con.getConnection().prepareStatement(SQL_UPDATE);
+            ps.execute();
+        } catch (SQLException e) {
+            System.out.println("No se actualizo el Estado");
+        }
+    }
     //------------------FUNCIONES PARA BOTON QUITAR-----------------------------
     //stock que tiene ese producto para sumarlo
     public int total_stock(String id_detalleventa){
@@ -1044,6 +1088,7 @@ public class venta extends javax.swing.JInternalFrame {
             limpiar_prod();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+    
     private void limpiar_prod(){
         //limpiar textfield
         txtCodProd.setText("");
@@ -1082,6 +1127,7 @@ public class venta extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(this, "pago en Abono");
                 tpago = "a";
                 actu_venta(tpago);
+                act_cliente();
                 imprimir2 imp = new imprimir2();
                 imp.setVisible(true);
                 dispose();

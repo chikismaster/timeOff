@@ -575,7 +575,7 @@ public class corteFinal extends javax.swing.JInternalFrame {
             double efe = Double.parseDouble(txtEfectivo.getText().toString());
             double tar = Double.parseDouble(txtTarjeta.getText().toString());
             double abono = Double.parseDouble(txtAbono.getText().toString());
-            double tot =ini+efe+tar+abono;
+            double tot =efe+tar+abono;
             String t = String.valueOf(tot);
             txtTotal.setText(t);
         }

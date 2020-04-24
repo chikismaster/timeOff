@@ -204,7 +204,7 @@
                               </Group>
                           </Group>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="txtVendedor" alignment="0" pref="219" max="32767" attributes="0"/>
+                              <Component id="txtVendedor" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtStock" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtProducto" alignment="0" max="32767" attributes="0"/>
                               <Component id="txtCliente" alignment="0" max="32767" attributes="0"/>

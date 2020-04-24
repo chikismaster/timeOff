@@ -9,20 +9,20 @@ import modelos.login;
 public class conexion {
     
     private static Connection conn;
-    
+    /*
     //conexion local
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String user = "root";
     private static final String password = "";
     private static final String url = "jdbc:mysql://localhost:3306/db_tester";
+    */
     
-    /*
     //conexion nube (clever-cloud)
     private static final String driver = "com.mysql.jdbc.Driver";
     private static final String user = "uwxe4zfnuzulaykh";
     private static final String password = "nOwtgWhZa16iA9deHx4D";
     private static final String url = "jdbc:mysql://b7sis9pkpmxjxql3njhz-mysql.services.clever-cloud.com/b7sis9pkpmxjxql3njhz";
-    */
+    
     /*
     //conexion (production)
     private static final String driver = "com.mysql.jdbc.Driver";
