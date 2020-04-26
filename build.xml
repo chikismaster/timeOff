@@ -73,7 +73,7 @@
     
 
 <target name="-post-jar">
-    <property name="store.jar.name" value="pv"/>
+    <property name="store.jar.name" value="TimeOff"/>
  
     <property name="store.dir" value="Punto de Venta"/>
     <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
