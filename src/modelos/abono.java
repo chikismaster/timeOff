@@ -512,9 +512,11 @@ public class abono extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
         }
         else{
-        insertar_abono();
-        JOptionPane.showMessageDialog(null, "Se genero Abono");
-        dispose();
+            insertar_abono();
+            JOptionPane.showMessageDialog(null, "Se genero Abono");
+            System.out.println("se cerro Abono");
+            con.desconectar();
+            dispose();
         }
         
         //JOptionPane.showMessageDialog(null, "si jalo el boton!!");
