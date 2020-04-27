@@ -54,9 +54,26 @@ public class conexion {
     }
     
     public void desconectar(){
-        conn = null;
+        if (conn != null) {
+            try {
+                conn.close(); 
+                System.out.println("conexion terminada");
+            } catch (Exception e) {
+            }
+        }        
+        /*conn = null;
         if (conn == null) {
             System.out.println("conexion terminada");
+        }*/
+    }
+    
+    public void desconectar2() {
+        if (conn != null) {
+            try {
+                conn.close(); 
+                System.out.println("conexion terminada");
+            } catch (Exception e) {
+            }
         }
     }
     

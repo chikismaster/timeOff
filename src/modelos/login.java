@@ -344,13 +344,19 @@ public class login extends javax.swing.JFrame {
     }
     public void cerrar_pagina(){
         error_db ed = new error_db();
-        ed.setVisible(true);    
+        ed.setVisible(true);
+        //cerrar session
+        System.out.println("se cerro login");
+        con.desconectar();
         dispose();
     }
     //funcion cambia de page si se logea bien
     public void cambiar_pag(){
         principal uno=new principal();
         uno.setVisible(true);
+        //cerrar session
+        System.out.println("se cerro login");
+        con.desconectar();        
         dispose();
     }
     

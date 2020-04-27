@@ -259,6 +259,9 @@ public class reporteVentas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
     //boton cancelar
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        //cerrar session
+        System.out.println("se cerro reporte ventas");
+        con.desconectar();        
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
     //boton aceptar accion

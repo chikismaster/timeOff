@@ -88,12 +88,13 @@ public class abono extends javax.swing.JInternalFrame {
         }
       return DT;
     }
-    //limpia tabla
+    //metodo limpiar tabla
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
             DT.removeRow(i);
             i = i - 1;
         }
+        DT.setColumnCount(0);
     }
     
     //funcion que devuelve la fecha de hoy en string
@@ -515,6 +516,7 @@ public class abono extends javax.swing.JInternalFrame {
             insertar_abono();
             JOptionPane.showMessageDialog(null, "Se genero Abono");
             System.out.println("se cerro Abono");
+            //desconectar al salir
             con.desconectar();
             dispose();
         }
@@ -566,6 +568,7 @@ public class abono extends javax.swing.JInternalFrame {
         if ((nombreCliente.equals("")) && (numeroCliente.equals(""))) {
             JOptionPane.showMessageDialog(null, "ingresa al menos un campo a buscar");
         }else{
+            LimpiarTabla();
             listar();
             //seleccionar id de la tabla
             //int fila = buscaCliente.getSelectedRow();

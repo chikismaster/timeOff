@@ -582,6 +582,9 @@ public class corteFinal extends javax.swing.JInternalFrame {
         
         else{
             JOptionPane.showMessageDialog(null, "Abra primero fondo inicial");
+            //cerrar session
+            System.out.println("se cerro crotefinal");
+            con.desconectar();
             dispose();    
         }
         
@@ -598,6 +601,9 @@ public class corteFinal extends javax.swing.JInternalFrame {
         int id=id_corte();
         System.out.println(id);
         actualizar_estado(id,estado);
+        //cerrar session
+        System.out.println("se cerro crotefinal");
+        con.desconectar();
         dispose();
     }//GEN-LAST:event_CorrectoActionPerformed
 
@@ -606,6 +612,9 @@ public class corteFinal extends javax.swing.JInternalFrame {
         String estado="Falto";
         int id=id_corte();
         actualizar_estado(id,estado);
+        //cerrar session
+        System.out.println("se cerro crotefinal");
+        con.desconectar();
         dispose();
     }//GEN-LAST:event_FaltpActionPerformed
 
@@ -614,6 +623,9 @@ public class corteFinal extends javax.swing.JInternalFrame {
         String estado="Sobro";
         int id=id_corte();
         actualizar_estado(id,estado);
+        //cerrar session
+        System.out.println("se cerro crotefinal");
+        con.desconectar();
         dispose();
     }//GEN-LAST:event_SobroActionPerformed
 
