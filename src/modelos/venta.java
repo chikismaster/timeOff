@@ -1133,13 +1133,19 @@ public class venta extends javax.swing.JInternalFrame {
                 imp.setVisible(true);
                 dispose();
             }else if (seleccion == 2){
-                JOptionPane.showMessageDialog(this, "pago en Abono");
-                tpago = "a";
-                actu_venta(tpago);
-                act_cliente();
-                imprimir2 imp = new imprimir2();
-                imp.setVisible(true);
-                dispose();
+                if(nom_cliente==null){
+                    JOptionPane.showMessageDialog(this, "pago en Abono");
+                    tpago = "a";
+                    actu_venta(tpago);
+                    act_cliente();
+                    imprimir2 imp = new imprimir2();
+                    imp.setVisible(true);
+                    dispose();   
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Error los datos del cliente estan vacios");    
+                }
+
             }else {
                 JOptionPane.showMessageDialog(this, "cancelo");
             }
