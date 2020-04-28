@@ -316,11 +316,15 @@ public class corteInicial extends javax.swing.JInternalFrame {
         int est = estado_corte();
         if(est==1){
             JOptionPane.showMessageDialog(null, "Haga primero corte de caja para poder volver a hacer inicio de fondo");
+            System.out.println("se cerro corte inicial");
+            con.desconectar();
             dispose();
         }
         else{
             insertar_fondo();
             JOptionPane.showMessageDialog(null, "Se genero Corte Inicial");
+            System.out.println("se cerro corte inicial");
+            con.desconectar();
             dispose();
         }
 //JOptionPane.showMessageDialog(null, "si jalo el boton!!");

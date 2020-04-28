@@ -34,6 +34,8 @@ public class venta extends javax.swing.JInternalFrame {
     private static String quitar = ""; //variable para guaradr el id del prod a quitar
     private static double restartotal = 0; 
     private static int quitados_stock = 0;
+    //bandera para ver si no se hizo nada de compra cerrar
+    private static int cero_compra = 0;
     
     //constructor de venta
     public venta() {
@@ -326,6 +328,8 @@ public class venta extends javax.swing.JInternalFrame {
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
             ps.execute();
+            //para saber si se hizo movimientos
+            cero_compra = 1;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "no guardo en detalle_venta");
         }
@@ -991,16 +995,17 @@ public class venta extends javax.swing.JInternalFrame {
         jTable1.setModel(getDatos(cliente, dni));
         
         if (band == 0) {
-            r = JOptionPane.showConfirmDialog(this, "Cleinte No Registrado, Desea Reagistrar?");
+            r = JOptionPane.showConfirmDialog(this, "Cleinte No Registrado, ve y registralo en Cliente");
                 if (r == 0) {
-                    Cliente cli = new Cliente();
-                    principal.VentanaPrincipal.add(cli);
-                    cli.setVisible(true);
+                    System.out.println("se cerro venta");
+                    con.desconectar();
                     dispose();
                 }else{
                     JOptionPane.showMessageDialog(this, "hacer ticket sin cliente registrado");
                     txtCodCliente.setText("");
                     txtcliente.setText("");
+                    LimpiarTabla();
+                    jTable1.setModel(getDatos3());
                 }
         }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
@@ -1029,7 +1034,9 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
         }
         if (hay == 0) {
-            g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
+            JOptionPane.showMessageDialog(this, "intenta otro");
+            txtCodProd.setText("");
+            /*g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
             if (g == 0) {
                 Producto pr = new Producto();
                 principal.VentanaPrincipal.add(pr);
@@ -1038,7 +1045,7 @@ public class venta extends javax.swing.JInternalFrame {
             }else{
                 JOptionPane.showMessageDialog(this, "intenta otro");
                 txtCodProd.setText("");
-            }
+            }*/
         }
         txtCantidad.setValue(1);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -1202,24 +1209,29 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTable1MouseClicked
     //boton cancelar y salir
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
-        //funcion para regresar todo a stock al cancelar
-        detalle_venta();
-        //eliminamos los productos en tabla detalleventa 
-        String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")"; 
-        try {
-            ps = con.getConnection().prepareStatement(SQL_del);
-            ps.execute();
-            
-        } catch (SQLException ex) {
-            System.out.println("no elimina detalle de venta");
+        //validar si esta vacia la venta
+        if (cero_compra == 0) {
+            System.out.println("no se compro nada bai");
+        }else{
+            //funcion para regresar todo a stock al cancelar
+            detalle_venta();
+            //eliminamos los productos en tabla detalleventa 
+            String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")"; 
+            try {
+                ps = con.getConnection().prepareStatement(SQL_del);
+                ps.execute();
+
+            } catch (SQLException ex) {
+                System.out.println("no elimina detalle de venta");
+            }
+            //eliminamos la venta relacionadad a detalle
+            del_ventas();
         }
-        //eliminamos la venta relacionadad a detalle
-        del_ventas();
         //cerramos conexion antes de salir
         con.desconectar();
         //cerramos pantalla
         dispose();
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtCodClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodClienteActionPerformed

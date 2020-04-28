@@ -546,23 +546,27 @@ public class abono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtCelularClienteActionPerformed
 
     private void RealizarAbonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarAbonoActionPerformed
-        // TODO add your handling code here:
-        String celular = txtCelularCliente.getText().toString();
-        String idClie=id_cliente(celular);
-        double adeuda = monto(idClie);
-        txtNombreCliente.setText(nom_cliente(celular));
-        if (adeuda==0){
-            JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
+        //validar si hay cantidad abonar y si hay cliente
+        String nombre = txtNombreCliente.getText();
+        String celular = txtCelularCliente.getText();
+        if (nombre.equals("") || celular.equals("")) {
+            JOptionPane.showMessageDialog(null, "no selecciono ningun cliente");
+        }else{
+            String idClie=id_cliente(celular);
+            double adeuda = monto(idClie);
+            txtNombreCliente.setText(nom_cliente(celular));
+            if (adeuda==0){
+                JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
+            }
+            else{
+                insertar_abono();
+                JOptionPane.showMessageDialog(null, "Se genero Abono");
+                System.out.println("se cerro Abono");
+                //desconectar al salir
+                con.desconectar();
+                dispose();
+            }
         }
-        else{
-            insertar_abono();
-            JOptionPane.showMessageDialog(null, "Se genero Abono");
-            System.out.println("se cerro Abono");
-            //desconectar al salir
-            con.desconectar();
-            dispose();
-        }
-        
         //JOptionPane.showMessageDialog(null, "si jalo el boton!!");
     }//GEN-LAST:event_RealizarAbonoActionPerformed
 
