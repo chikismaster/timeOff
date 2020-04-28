@@ -1199,6 +1199,7 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTable1MouseClicked
     //boton cancelar y salir
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        
         //funcion para regresar todo a stock al cancelar
         detalle_venta();
         //eliminamos los productos en tabla detalleventa 
