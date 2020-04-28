@@ -21,6 +21,10 @@ public class vendedor extends javax.swing.JInternalFrame {
     private ResultSet RS;
     private String SQL_select = "select * from vendedor";
     
+    //*************************varriables globales******************************
+    //var global para almacenar el id del vendedor
+    public static String idvend = "";
+    
     public vendedor() {
         initComponents();
         ps = null;
@@ -122,6 +126,22 @@ public class vendedor extends javax.swing.JInternalFrame {
         }
     }
     
+    //funcion para hacer el vendedor inactivo
+    public void inactivo_vendedor(){
+        //consulta sql
+        String SQL_SELECT ="UPDATE vendedor v SET v.Estado = 0 WHERE v.IdVendedor = "+idvend+"";
+        //ejecutar consulta
+        try {
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            ps.execute();
+            //metodos para que se refresque la tabla
+            LimpiarTabla();
+            jTable1.setModel(getDatos2());
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -149,6 +169,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        setTitle("Vendedor");
 
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -398,26 +419,34 @@ public class vendedor extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //seleccionar id de la tabla
-        int fila = jTable1.getSelectedRow();
-        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
-        //agregar datos
-        String dni = txtDni.getText().toString();
-        
-        
-        String SQL_DELETE = "DELETE FROM vendedor WHERE IdVendedor ="+id+"";
-        
-        try {
-            ps = con.getConnection().prepareStatement(SQL_DELETE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos2());
-        } catch (SQLException ex) {
-            System.out.println("no elimina vendedor");
+        if (idvend.equals("")) {
+            JOptionPane.showMessageDialog(null, "seleccione un vendedor");
+        }else{
+            //agregar datos
+            String dni = txtDni.getText().toString();
+
+            String SQL_DELETE = "DELETE FROM vendedor WHERE IdVendedor ="+idvend+"";
+
+            try {
+                ps = con.getConnection().prepareStatement(SQL_DELETE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos2());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "este vendedor tiene ventas registradas (que sea inactivo)");
+                int r = JOptionPane.showConfirmDialog(this, "¿quieres hacer el vendedor inactivo?");
+                if (r == 0) {
+                    inactivo_vendedor();
+                }else{
+                    JOptionPane.showMessageDialog(this, "OK, sigue activo");                    
+                }
+                System.out.println("no elimina vendedor (porque tiene ventas registradas)");
+            }
+            limpia_crud();
+            reiniciar_id();
         }
-        limpia_crud();
-        reiniciar_id();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -435,6 +464,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         int estado = Integer.parseInt(jTable1.getValueAt(fila, 4).toString());
         String usu = jTable1.getValueAt(fila, 5).toString();
         
+        idvend = id;
         txtNombres.setText(nom);
         txtTelefono.setText(tel);
         comboEstado.setSelectedIndex(estado);

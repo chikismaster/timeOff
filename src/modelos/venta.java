@@ -52,7 +52,8 @@ public class venta extends javax.swing.JInternalFrame {
         txtVendedor.setText(login.a);
         //el total sea igual a cero
         txtTotalPagar.setText("0");
-        
+        //validamos en cero una bandera
+        cero_compra = 0;
         txtcliente.setText("Sin elegir");
     }
     

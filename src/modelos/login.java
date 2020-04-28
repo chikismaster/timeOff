@@ -333,6 +333,7 @@ public class login extends javax.swing.JFrame {
         con.desconectar();
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
+    
     //----------FUNCION PARA EVALUAR QUE LA DB ESTA ENCENDIDA-------------------
     public void validar_conexion(){
         boolean chi = con.sijalo();
@@ -373,7 +374,7 @@ public class login extends javax.swing.JFrame {
         //guardamos nombre del usuario como token 
         a = txtNombre.getText().toString();
         
-        String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"'";
+        String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"' AND Estado = 1";
         try {
             ps = con.getConnection().prepareStatement(SQL_select);
             RS = ps.executeQuery();
