@@ -50,6 +50,8 @@ public class venta extends javax.swing.JInternalFrame {
         txtVendedor.setText(login.a);
         //el total sea igual a cero
         txtTotalPagar.setText("0");
+        
+        txtcliente.setText("Sin elegir");
     }
     
     //metodo que reinicia el id de venta
@@ -435,7 +437,7 @@ public class venta extends javax.swing.JInternalFrame {
     
     public void act_cliente(){
         String monto = txtTotalPagar.getText();
-        String nom=txtCliente.getText();
+        String nom=txtcliente.getText();
         double adeuda = monto(nom);
         double abo = Double.parseDouble(monto);
         
@@ -573,7 +575,6 @@ public class venta extends javax.swing.JInternalFrame {
         jLabel6 = new javax.swing.JLabel();
         txtCodCliente = new javax.swing.JTextField();
         btnBuscarCliente = new javax.swing.JButton();
-        txtCliente = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtProducto = new javax.swing.JTextField();
@@ -592,6 +593,7 @@ public class venta extends javax.swing.JInternalFrame {
         jButton2 = new javax.swing.JButton();
         txtQuitar = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
+        txtcliente = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -669,16 +671,6 @@ public class venta extends javax.swing.JInternalFrame {
         btnBuscarCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBuscarClienteActionPerformed(evt);
-            }
-        });
-
-        txtCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        txtCliente.setForeground(new java.awt.Color(0, 51, 255));
-        txtCliente.setCaretColor(new java.awt.Color(0, 51, 255));
-        txtCliente.setDisabledTextColor(new java.awt.Color(0, 51, 204));
-        txtCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtClienteActionPerformed(evt);
             }
         });
 
@@ -779,6 +771,9 @@ public class venta extends javax.swing.JInternalFrame {
             }
         });
 
+        txtcliente.setEditable(false);
+        txtcliente.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -810,7 +805,7 @@ public class venta extends javax.swing.JInternalFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(11, 11, 11)
                                 .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -822,10 +817,12 @@ public class venta extends javax.swing.JInternalFrame {
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                            .addComponent(txtVendedor)
                             .addComponent(txtStock)
                             .addComponent(txtProducto)
-                            .addComponent(txtCliente)))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -847,8 +844,8 @@ public class venta extends javax.swing.JInternalFrame {
                     .addComponent(jLabel6)
                     .addComponent(txtCodCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel7))
+                    .addComponent(jLabel7)
+                    .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -976,7 +973,7 @@ public class venta extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 12, Short.MAX_VALUE))
+                .addGap(0, 13, Short.MAX_VALUE))
         );
 
         pack();
@@ -989,7 +986,7 @@ public class venta extends javax.swing.JInternalFrame {
         int r;
         
         LimpiarTabla();
-        String cliente = txtCliente.getText().toString();
+        String cliente = txtcliente.getText().toString();
         String dni = txtCodCliente.getText().toString();
         jTable1.setModel(getDatos(cliente, dni));
         
@@ -1003,7 +1000,7 @@ public class venta extends javax.swing.JInternalFrame {
                 }else{
                     JOptionPane.showMessageDialog(this, "hacer ticket sin cliente registrado");
                     txtCodCliente.setText("");
-                    txtCliente.setText("");
+                    txtcliente.setText("");
                 }
         }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
@@ -1112,7 +1109,7 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "no se tienen productos");
         }else{
             //definimos nombre del cliente para mandarlo a imprimir
-            nom_cliente = txtCliente.getText().toString();
+            //nom_cliente = txtcliente.getText().toString();
             //definimos la variable que sera tipo de pago
             String[] options = {"Tarjeta", "Efectivo", "Abono"};
             int seleccion = JOptionPane.showOptionDialog(null, "Es necesario que seleccione una opcion", "Titulo", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -1133,13 +1130,19 @@ public class venta extends javax.swing.JInternalFrame {
                 imp.setVisible(true);
                 dispose();
             }else if (seleccion == 2){
-                JOptionPane.showMessageDialog(this, "pago en Abono");
-                tpago = "a";
-                actu_venta(tpago);
-                act_cliente();
-                imprimir2 imp = new imprimir2();
-                imp.setVisible(true);
-                dispose();
+                String cliente = txtcliente.getText().toString();
+                if(cliente.equals("Sin elegir")){
+                    JOptionPane.showMessageDialog(this, "Error los datos del cliente estan vacios");    
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "pago en Abono");
+                    tpago = "a";
+                    actu_venta(tpago);
+                    act_cliente();
+                    imprimir2 imp = new imprimir2();
+                    imp.setVisible(true);
+                    dispose();   
+                }
             }else {
                 JOptionPane.showMessageDialog(this, "cancelo");
             }
@@ -1166,7 +1169,7 @@ public class venta extends javax.swing.JInternalFrame {
             int estado = Integer.parseInt(jTable1.getValueAt(fila, 4).toString());
             
             txtCodCliente.setText(dni);
-            txtCliente.setText(nom);
+            txtcliente.setText(nom);
         //si es 7 es la tabla "venta"
         }else if(numcol == 7){
             /*
@@ -1222,10 +1225,6 @@ public class venta extends javax.swing.JInternalFrame {
     private void txtCodClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodClienteActionPerformed
-
-    private void txtClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtClienteActionPerformed
 
     private void txtFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFechaActionPerformed
         // TODO add your handling code here:
@@ -1321,7 +1320,6 @@ public class venta extends javax.swing.JInternalFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JSpinner txtCantidad;
-    private javax.swing.JTextField txtCliente;
     private javax.swing.JTextField txtCodCliente;
     private javax.swing.JTextField txtCodProd;
     private javax.swing.JTextField txtFecha;
@@ -1332,5 +1330,6 @@ public class venta extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtStock;
     private javax.swing.JTextField txtTotalPagar;
     private javax.swing.JTextField txtVendedor;
+    private javax.swing.JTextField txtcliente;
     // End of variables declaration//GEN-END:variables
 }
