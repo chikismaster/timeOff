@@ -34,6 +34,10 @@ public class abono extends javax.swing.JInternalFrame {
         ps = null;
         initComponents();
         System.out.println(fechahoy());
+        //limpiar tabla antes de usar siempre
+        LimpiarTabla();
+        //tabla todos los clientes
+        listar2();
         //esta clase sirve para ver si se cerro desconectar de db
         addInternalFrameListener(new InternalFrameAdapter(){
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -51,7 +55,7 @@ public class abono extends javax.swing.JInternalFrame {
     //columnas tabla
     private DefaultTableModel setTitutlos(){
         DT.addColumn("IdCliente");
-        DT.addColumn("Dni");
+        DT.addColumn("Telefono");
         DT.addColumn("Nombres");
         DT.addColumn("Direccion");
         DT.addColumn("Estado");
@@ -88,6 +92,44 @@ public class abono extends javax.swing.JInternalFrame {
         }
       return DT;
     }
+    //****************TABLA MOSTRAR TODO LOS CLIENTE****************************
+    private void listar2(){
+        tabla_clientes.setModel(getDatos2());
+    }
+    //columnas tabla
+    private DefaultTableModel setTitutlos2(){
+        DT.addColumn("IdCliente");
+        DT.addColumn("Dni");
+        DT.addColumn("Nombres");
+        DT.addColumn("Direccion");
+        DT.addColumn("Estado");
+        DT.addColumn("adeudo");
+        return DT;
+    }
+    //muestra columnas
+    private DefaultTableModel getDatos2(){         
+        setTitutlos2();
+        String SQL_SELECT = "SELECT * FROM cliente";
+        try {
+            
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            RS = ps.executeQuery();
+            Object[] fila = new Object[6];
+            while (RS.next()){
+                fila[0] = RS.getInt(1);
+                fila[1] = RS.getString(2);
+                fila[2] = RS.getString(3);
+                fila[3] = RS.getString(4);
+                fila[4] = RS.getString(5);
+                fila[5] = RS.getString(6);
+                DT.addRow(fila);
+            }
+        } catch (SQLException e) {
+            System.out.println("error mostrar ");
+        }
+      return DT;
+    }
+    
     //metodo limpiar tabla
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
@@ -585,10 +627,12 @@ public class abono extends javax.swing.JInternalFrame {
         String nom = tabla_clientes.getValueAt(fila, 2).toString();
         String dir = tabla_clientes.getValueAt(fila, 3).toString();
         int estado = Integer.parseInt(tabla_clientes.getValueAt(fila, 4).toString());
+        String adeudo = tabla_clientes.getValueAt(fila, 5).toString();
         
         
         txtCelularCliente.setText(dni);
         txtNombreCliente.setText(nom);
+        txtAdeudo.setText(adeudo);
     }//GEN-LAST:event_tabla_clientesMouseClicked
     
     

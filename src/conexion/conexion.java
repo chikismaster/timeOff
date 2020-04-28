@@ -67,16 +67,6 @@ public class conexion {
         }*/
     }
     
-    public void desconectar2() {
-        if (conn != null) {
-            try {
-                conn.close(); 
-                System.out.println("conexion terminada");
-            } catch (Exception e) {
-            }
-        }
-    }
-    
     public boolean sijalo(){
         return cam;
     }
