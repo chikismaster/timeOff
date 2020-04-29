@@ -565,8 +565,15 @@ public class abono extends javax.swing.JInternalFrame {
             String idClie=id_cliente(celular);
             double adeuda = monto(idClie);
             txtNombreCliente.setText(nom_cliente(celular));
+            String abono = txtCantidad.getText().toString();
+            double abo = Double.parseDouble(abono);
+            
             if (adeuda==0){
                 JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
+            }
+            else if (abo>adeuda){
+                JOptionPane.showMessageDialog(null, "la cantidad a abonar sobre pasa la adeuda");
+                
             }
             else{
                 insertar_abono();
