@@ -223,6 +223,12 @@ public class vendedor extends javax.swing.JInternalFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("CONTRASEÑA");
 
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
+
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel6.setText("CELULAR");
@@ -365,13 +371,13 @@ public class vendedor extends javax.swing.JInternalFrame {
         String usu = txtusuario.getText().toString();
         //imprimimos usario
         System.out.println(usu);
+        System.out.println("estado-->"+estado);
         //validamos que ingresen todos los campos
-        if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+        if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals("")) || estado.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
             //una vez validado se hace el insert
             String SQL_INSERT = "INSERT INTO vendedor (Dni,Nombres,Telefono,Estado,User) values('"+dn+"','"+nom+"','"+tel+"','"+estado+"','"+usu+"')";
-
             try {
                 ps = con.getConnection().prepareStatement(SQL_INSERT);
                 int res = ps.executeUpdate();
@@ -400,7 +406,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         String tel = txtTelefono.getText().toString();
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
-        if ((dni.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+        if ((dni.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals("")) || estado.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
             //consulta sql
@@ -471,6 +477,18 @@ public class vendedor extends javax.swing.JInternalFrame {
         txtusuario.setText(usu);
         txtDni.setText(dni);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -347,6 +347,11 @@ public class abono extends javax.swing.JInternalFrame {
                 txtCantidadActionPerformed(evt);
             }
         });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("telefono");
@@ -354,6 +359,11 @@ public class abono extends javax.swing.JInternalFrame {
         txtCelularCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCelularClienteActionPerformed(evt);
+            }
+        });
+        txtCelularCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCelularClienteKeyTyped(evt);
             }
         });
 
@@ -638,6 +648,30 @@ public class abono extends javax.swing.JInternalFrame {
         txtNombreCliente.setText(nom);
         txtAdeudo.setText(adeudo);
     }//GEN-LAST:event_tabla_clientesMouseClicked
+
+    private void txtCelularClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCelularClienteKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtCelularClienteKeyTyped
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
     
     
 

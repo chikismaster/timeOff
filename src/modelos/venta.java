@@ -689,12 +689,18 @@ public class venta extends javax.swing.JInternalFrame {
         txtProducto.setEditable(false);
         txtProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtProducto.setForeground(new java.awt.Color(0, 51, 255));
-        txtProducto.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtProducto.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtProducto.setCaretColor(new java.awt.Color(0, 51, 255));
         txtProducto.setDisabledTextColor(new java.awt.Color(0, 51, 204));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("PRECIO");
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("STOCK");
@@ -1301,6 +1307,18 @@ public class venta extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
     
     public void del_ventas(){
         String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";
