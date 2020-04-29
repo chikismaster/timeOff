@@ -21,6 +21,10 @@ public class vendedor extends javax.swing.JInternalFrame {
     private ResultSet RS;
     private String SQL_select = "select * from vendedor";
     
+    //*************************varriables globales******************************
+    //var global para almacenar el id del vendedor
+    public static String idvend = "";
+    
     public vendedor() {
         initComponents();
         ps = null;
@@ -122,6 +126,22 @@ public class vendedor extends javax.swing.JInternalFrame {
         }
     }
     
+    //funcion para hacer el vendedor inactivo
+    public void inactivo_vendedor(){
+        //consulta sql
+        String SQL_SELECT ="UPDATE vendedor v SET v.Estado = 0 WHERE v.IdVendedor = "+idvend+"";
+        //ejecutar consulta
+        try {
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            ps.execute();
+            //metodos para que se refresque la tabla
+            LimpiarTabla();
+            jTable1.setModel(getDatos2());
+        } catch (SQLException e) {
+            System.out.println("no sirve la actualizar");
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -144,12 +164,12 @@ public class vendedor extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
 
         setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         setClosable(true);
         setIconifiable(true);
         setMaximizable(true);
+        setTitle("Vendedor");
 
         jPanel1.setBorder(new javax.swing.border.MatteBorder(null));
 
@@ -202,6 +222,12 @@ public class vendedor extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("CONTRASEÑA");
+
+        txtTelefono.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoKeyTyped(evt);
+            }
+        });
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -305,38 +331,30 @@ public class vendedor extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 594, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 195, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
         );
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Vendedor");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(250, 250, 250)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -353,13 +371,13 @@ public class vendedor extends javax.swing.JInternalFrame {
         String usu = txtusuario.getText().toString();
         //imprimimos usario
         System.out.println(usu);
+        System.out.println("estado-->"+estado);
         //validamos que ingresen todos los campos
-        if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+        if ((dn.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals("")) || estado.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
             //una vez validado se hace el insert
             String SQL_INSERT = "INSERT INTO vendedor (Dni,Nombres,Telefono,Estado,User) values('"+dn+"','"+nom+"','"+tel+"','"+estado+"','"+usu+"')";
-
             try {
                 ps = con.getConnection().prepareStatement(SQL_INSERT);
                 int res = ps.executeUpdate();
@@ -388,7 +406,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         String tel = txtTelefono.getText().toString();
         String estado = comboEstado.getSelectedItem().toString();
         String usu = txtusuario.getText().toString();
-        if ((dni.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals(""))) {
+        if ((dni.equals("")) || (nom.equals("")) || (tel.equals("")) || (estado.equals("")) || (usu.equals("")) || estado.equals("Seleccionar")) {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
             //consulta sql
@@ -407,26 +425,34 @@ public class vendedor extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        //seleccionar id de la tabla
-        int fila = jTable1.getSelectedRow();
-        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
-        //agregar datos
-        String dni = txtDni.getText().toString();
-        
-        
-        String SQL_DELETE = "DELETE FROM vendedor WHERE IdVendedor ="+id+"";
-        
-        try {
-            ps = con.getConnection().prepareStatement(SQL_DELETE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos2());
-        } catch (SQLException ex) {
-            System.out.println("no elimina vendedor");
+        if (idvend.equals("")) {
+            JOptionPane.showMessageDialog(null, "seleccione un vendedor");
+        }else{
+            //agregar datos
+            String dni = txtDni.getText().toString();
+
+            String SQL_DELETE = "DELETE FROM vendedor WHERE IdVendedor ="+idvend+"";
+
+            try {
+                ps = con.getConnection().prepareStatement(SQL_DELETE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos2());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "este vendedor tiene ventas registradas (que sea inactivo)");
+                int r = JOptionPane.showConfirmDialog(this, "¿quieres hacer el vendedor inactivo?");
+                if (r == 0) {
+                    inactivo_vendedor();
+                }else{
+                    JOptionPane.showMessageDialog(this, "OK, sigue activo");                    
+                }
+                System.out.println("no elimina vendedor (porque tiene ventas registradas)");
+            }
+            limpia_crud();
+            reiniciar_id();
         }
-        limpia_crud();
-        reiniciar_id();
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
@@ -444,12 +470,25 @@ public class vendedor extends javax.swing.JInternalFrame {
         int estado = Integer.parseInt(jTable1.getValueAt(fila, 4).toString());
         String usu = jTable1.getValueAt(fila, 5).toString();
         
+        idvend = id;
         txtNombres.setText(nom);
         txtTelefono.setText(tel);
         comboEstado.setSelectedIndex(estado);
         txtusuario.setText(usu);
         txtDni.setText(dni);
     }//GEN-LAST:event_jTable1MouseClicked
+
+    private void txtTelefonoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtTelefonoKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -458,7 +497,6 @@ public class vendedor extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JComboBox<String> comboEstado;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;

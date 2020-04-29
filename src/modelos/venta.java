@@ -34,6 +34,8 @@ public class venta extends javax.swing.JInternalFrame {
     private static String quitar = ""; //variable para guaradr el id del prod a quitar
     private static double restartotal = 0; 
     private static int quitados_stock = 0;
+    //bandera para ver si no se hizo nada de compra cerrar
+    private static int cero_compra = 0;
     
     //constructor de venta
     public venta() {
@@ -50,7 +52,8 @@ public class venta extends javax.swing.JInternalFrame {
         txtVendedor.setText(login.a);
         //el total sea igual a cero
         txtTotalPagar.setText("0");
-        
+        //validamos en cero una bandera
+        cero_compra = 0;
         txtcliente.setText("Sin elegir");
     }
     
@@ -326,6 +329,8 @@ public class venta extends javax.swing.JInternalFrame {
         try {
             ps = con.getConnection().prepareStatement(SQL_insert);
             ps.execute();
+            //para saber si se hizo movimientos
+            cero_compra = 1;
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "no guardo en detalle_venta");
         }
@@ -684,11 +689,18 @@ public class venta extends javax.swing.JInternalFrame {
         txtProducto.setEditable(false);
         txtProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtProducto.setForeground(new java.awt.Color(0, 51, 255));
+        txtProducto.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
         txtProducto.setCaretColor(new java.awt.Color(0, 51, 255));
         txtProducto.setDisabledTextColor(new java.awt.Color(0, 51, 204));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("PRECIO");
+
+        txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPrecioKeyTyped(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel11.setText("STOCK");
@@ -755,6 +767,7 @@ public class venta extends javax.swing.JInternalFrame {
         txtQuitar.setEditable(false);
         txtQuitar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtQuitar.setForeground(new java.awt.Color(0, 51, 255));
+        txtQuitar.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         txtQuitar.setCaretColor(new java.awt.Color(0, 51, 255));
         txtQuitar.setDisabledTextColor(new java.awt.Color(0, 51, 204));
         txtQuitar.addActionListener(new java.awt.event.ActionListener() {
@@ -991,23 +1004,24 @@ public class venta extends javax.swing.JInternalFrame {
         jTable1.setModel(getDatos(cliente, dni));
         
         if (band == 0) {
-            r = JOptionPane.showConfirmDialog(this, "Cleinte No Registrado, Desea Reagistrar?");
+            r = JOptionPane.showConfirmDialog(this, "Cleinte No Registrado, ve y registralo en Cliente");
                 if (r == 0) {
-                    Cliente cli = new Cliente();
-                    principal.VentanaPrincipal.add(cli);
-                    cli.setVisible(true);
+                    System.out.println("se cerro venta");
+                    con.desconectar();
                     dispose();
                 }else{
                     JOptionPane.showMessageDialog(this, "hacer ticket sin cliente registrado");
                     txtCodCliente.setText("");
                     txtcliente.setText("");
+                    LimpiarTabla();
+                    jTable1.setModel(getDatos3());
                 }
         }
     }//GEN-LAST:event_btnBuscarClienteActionPerformed
     
     //boton buscar producto por codigo de barras
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        LimpiarTabla();
+        //LimpiarTabla();
         int hay = 0;
         int g;
         String cod_pro = txtCodProd.getText().toString();
@@ -1029,7 +1043,9 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
         }
         if (hay == 0) {
-            g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
+            JOptionPane.showMessageDialog(this, "Producto no registrado, ve a registrar o intenta otro");
+            txtCodProd.setText("");
+            /*g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
             if (g == 0) {
                 Producto pr = new Producto();
                 principal.VentanaPrincipal.add(pr);
@@ -1038,7 +1054,7 @@ public class venta extends javax.swing.JInternalFrame {
             }else{
                 JOptionPane.showMessageDialog(this, "intenta otro");
                 txtCodProd.setText("");
-            }
+            }*/
         }
         txtCantidad.setValue(1);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -1048,6 +1064,9 @@ public class venta extends javax.swing.JInternalFrame {
         String producto_existe = txtProducto.getText();
         if (producto_existe.equals("")) {
             JOptionPane.showMessageDialog(null, "Seleccione producto");
+            //por si se quito la tabla de compra de producto (detalle de venta)
+            LimpiarTabla();
+            jTable1.setModel(getDatos3());
         }else{
             /*
             1.-limpiamos tablas
@@ -1090,6 +1109,9 @@ public class venta extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "No alcanzan los productos");
                 //limpiamos productos
                 limpiar_prod();
+                //por si se quito la tabla de compra de producto (detalle de venta)
+                LimpiarTabla();
+                jTable1.setModel(getDatos3());
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -1202,23 +1224,29 @@ public class venta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTable1MouseClicked
     //boton cancelar y salir
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        //funcion para regresar todo a stock al cancelar
-        detalle_venta();
-        //eliminamos los productos en tabla detalleventa 
-        String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")"; 
-        try {
-            ps = con.getConnection().prepareStatement(SQL_del);
-            ps.execute();
-            
-        } catch (SQLException ex) {
-            System.out.println("no elimina detalle de venta");
+        //validar si esta vacia la venta
+        if (cero_compra == 0) {
+            System.out.println("no se compro nada bai");
+        }else{
+            //funcion para regresar todo a stock al cancelar
+            detalle_venta();
+            //eliminamos los productos en tabla detalleventa 
+            String SQL_del = "DELETE FROM `detalle_ventas` WHERE IdVentas = (SELECT v.IdVentas FROM ventas v where v.NumeroSerie = "+ns+")"; 
+            try {
+                ps = con.getConnection().prepareStatement(SQL_del);
+                ps.execute();
+
+            } catch (SQLException ex) {
+                System.out.println("no elimina detalle de venta");
+            }
+            //eliminamos la venta relacionadad a detalle
+            del_ventas();
         }
-        //eliminamos la venta relacionadad a detalle
-        del_ventas();
         //cerramos conexion antes de salir
         con.desconectar();
         //cerramos pantalla
         dispose();
+        
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtCodClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodClienteActionPerformed
@@ -1279,6 +1307,18 @@ public class venta extends javax.swing.JInternalFrame {
         }
         
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtPrecioKeyTyped
     
     public void del_ventas(){
         String SQL_elim = "DELETE FROM `ventas` WHERE NumeroSerie = "+ns+"";

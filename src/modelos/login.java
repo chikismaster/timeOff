@@ -60,6 +60,7 @@ public class login extends javax.swing.JFrame {
         jLabel3.setText("jLabel3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 3));
 
@@ -332,6 +333,7 @@ public class login extends javax.swing.JFrame {
         con.desconectar();
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
+    
     //----------FUNCION PARA EVALUAR QUE LA DB ESTA ENCENDIDA-------------------
     public void validar_conexion(){
         boolean chi = con.sijalo();
@@ -344,13 +346,19 @@ public class login extends javax.swing.JFrame {
     }
     public void cerrar_pagina(){
         error_db ed = new error_db();
-        ed.setVisible(true);    
+        ed.setVisible(true);
+        //cerrar session
+        System.out.println("se cerro login");
+        con.desconectar();
         dispose();
     }
     //funcion cambia de page si se logea bien
     public void cambiar_pag(){
         principal uno=new principal();
         uno.setVisible(true);
+        //cerrar session
+        System.out.println("se cerro login");
+        con.desconectar();        
         dispose();
     }
     
@@ -366,7 +374,7 @@ public class login extends javax.swing.JFrame {
         //guardamos nombre del usuario como token 
         a = txtNombre.getText().toString();
         
-        String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"'";
+        String SQL_select = "SELECT Nombres,IdVendedor FROM vendedor WHERE User = '"+nom+"' AND Dni= '"+dni+"' AND Estado = 1";
         try {
             ps = con.getConnection().prepareStatement(SQL_select);
             RS = ps.executeQuery();

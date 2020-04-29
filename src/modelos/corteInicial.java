@@ -203,6 +203,11 @@ public class corteInicial extends javax.swing.JInternalFrame {
                 txtCantidadActionPerformed(evt);
             }
         });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
 
         Aceptar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         Aceptar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/acep2.png"))); // NOI18N
@@ -230,6 +235,11 @@ public class corteInicial extends javax.swing.JInternalFrame {
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/cancelar.png"))); // NOI18N
         jButton1.setText("Cancelar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -311,11 +321,15 @@ public class corteInicial extends javax.swing.JInternalFrame {
         int est = estado_corte();
         if(est==1){
             JOptionPane.showMessageDialog(null, "Haga primero corte de caja para poder volver a hacer inicio de fondo");
+            System.out.println("se cerro corte inicial");
+            con.desconectar();
             dispose();
         }
         else{
             insertar_fondo();
             JOptionPane.showMessageDialog(null, "Se genero Corte Inicial");
+            System.out.println("se cerro corte inicial");
+            con.desconectar();
             dispose();
         }
 //JOptionPane.showMessageDialog(null, "si jalo el boton!!");
@@ -324,6 +338,26 @@ public class corteInicial extends javax.swing.JInternalFrame {
     private void txtVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVendedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtVendedorActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        //cerrar session
+        System.out.println("se cerro corte inicial");
+        con.desconectar();
+        dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

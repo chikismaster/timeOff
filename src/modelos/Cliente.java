@@ -16,6 +16,9 @@ public class Cliente extends javax.swing.JInternalFrame {
     private conexion con = new conexion();
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
+    //*************************variables globales*******************************
+    //variable global para guardar el id seleccionado
+    private static int id_cliente = 0;
     
     public Cliente() {
         initComponents();
@@ -128,6 +131,17 @@ public class Cliente extends javax.swing.JInternalFrame {
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("DIRECCION");
+
+        txtDni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtDniActionPerformed(evt);
+            }
+        });
+        txtDni.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDniKeyTyped(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel4.setText("ESTADO");
@@ -254,7 +268,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         );
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("Cliente");
+        jLabel5.setText("Ingresa Cliente");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -266,8 +280,8 @@ public class Cliente extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(241, 241, 241)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -317,25 +331,28 @@ public class Cliente extends javax.swing.JInternalFrame {
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         //seleccionar id de la tabla
-        int fila = tabla_clientes.getSelectedRow();
-        int id = Integer.parseInt(tabla_clientes.getValueAt(fila, 0).toString());
+        System.out.println("id-->"+id_cliente);
         //datos
         String dni = txtDni.getText().toString();
         String nom = txtNom.getText().toString();
         String dir = txtDir.getText().toString();
         String estado = cboEstado.getSelectedItem().toString();
-        //consulta sql 
-        String SQL_UPDATE = "UPDATE cliente SET Celular='"+dni+"', Nombres='"+nom+"', Direccion='"+dir+"', Estado='"+estado+"' WHERE IdCliente="+id+"";
-        try {
-            ps = con.getConnection().prepareStatement(SQL_UPDATE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            tabla_clientes.setModel(getDatos());
-        } catch (SQLException e) {
-            System.out.println("no sirve la actualizar");
+        //validar si esta vacio al dar actuaizar
+        if ((dni.equals(""))||(nom.equals(""))||(dir.equals("")) || (estado.equals("SELECCIONAR"))) {
+            JOptionPane.showMessageDialog(null, "No seleccionaste el cliente a actualizar");
+        }else{
+           //consulta sql 
+            String SQL_UPDATE = "UPDATE cliente SET Celular='"+dni+"', Nombres='"+nom+"', Direccion='"+dir+"', Estado='"+estado+"' WHERE IdCliente="+id_cliente+"";
+            try {
+                ps = con.getConnection().prepareStatement(SQL_UPDATE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                tabla_clientes.setModel(getDatos());
+            } catch (SQLException e) {
+                System.out.println("no sirve la actualizar");
+            }
         }
-        
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -373,12 +390,28 @@ public class Cliente extends javax.swing.JInternalFrame {
         String dir = tabla_clientes.getValueAt(fila, 3).toString();
         int estado = Integer.parseInt(tabla_clientes.getValueAt(fila, 4).toString());
         
-        
+        id_cliente = Integer.parseInt(id);
         txtDni.setText(dni);
         txtNom.setText(nom);
         txtDir.setText(dir);
         cboEstado.setSelectedIndex(estado);
     }//GEN-LAST:event_tabla_clientesMouseClicked
+
+    private void txtDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtDniActionPerformed
+    //para validar que sean numero y no ingresar letras
+    private void txtDniKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtDniKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

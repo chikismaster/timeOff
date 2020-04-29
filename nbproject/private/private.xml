@@ -2,6 +2,13 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group/>
+=======
+        <group>
+            <file>file:/C:/Users/marca/Documents/NetBeansProjects/timeOff/src/modelos/vendedor.java</file>
+            <file>file:/C:/Users/marca/Documents/NetBeansProjects/timeOff/src/modelos/Cliente.java</file>
+        </group>
+>>>>>>> 0a77e4dabcbd4797897b3aad4220739247014549
     </open-files>
 </project-private>

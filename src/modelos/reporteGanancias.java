@@ -263,6 +263,9 @@ public class reporteGanancias extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btnAcceptActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        //cerrar session
+        System.out.println("se cerro reporte ganacias");
+        con.desconectar();        
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 

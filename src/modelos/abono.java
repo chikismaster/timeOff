@@ -34,6 +34,10 @@ public class abono extends javax.swing.JInternalFrame {
         ps = null;
         initComponents();
         System.out.println(fechahoy());
+        //limpiar tabla antes de usar siempre
+        LimpiarTabla();
+        //tabla todos los clientes
+        listar2();
         //esta clase sirve para ver si se cerro desconectar de db
         addInternalFrameListener(new InternalFrameAdapter(){
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -51,7 +55,7 @@ public class abono extends javax.swing.JInternalFrame {
     //columnas tabla
     private DefaultTableModel setTitutlos(){
         DT.addColumn("IdCliente");
-        DT.addColumn("Dni");
+        DT.addColumn("Telefono");
         DT.addColumn("Nombres");
         DT.addColumn("Direccion");
         DT.addColumn("Estado");
@@ -88,12 +92,51 @@ public class abono extends javax.swing.JInternalFrame {
         }
       return DT;
     }
-    //limpia tabla
+    //****************TABLA MOSTRAR TODO LOS CLIENTE****************************
+    private void listar2(){
+        tabla_clientes.setModel(getDatos2());
+    }
+    //columnas tabla
+    private DefaultTableModel setTitutlos2(){
+        DT.addColumn("IdCliente");
+        DT.addColumn("Dni");
+        DT.addColumn("Nombres");
+        DT.addColumn("Direccion");
+        DT.addColumn("Estado");
+        DT.addColumn("adeudo");
+        return DT;
+    }
+    //muestra columnas
+    private DefaultTableModel getDatos2(){         
+        setTitutlos2();
+        String SQL_SELECT = "SELECT * FROM cliente";
+        try {
+            
+            ps = con.getConnection().prepareStatement(SQL_SELECT);
+            RS = ps.executeQuery();
+            Object[] fila = new Object[6];
+            while (RS.next()){
+                fila[0] = RS.getInt(1);
+                fila[1] = RS.getString(2);
+                fila[2] = RS.getString(3);
+                fila[3] = RS.getString(4);
+                fila[4] = RS.getString(5);
+                fila[5] = RS.getString(6);
+                DT.addRow(fila);
+            }
+        } catch (SQLException e) {
+            System.out.println("error mostrar ");
+        }
+      return DT;
+    }
+    
+    //metodo limpiar tabla
     void LimpiarTabla() {
         for (int i = 0; i < DT.getRowCount(); i++) {
             DT.removeRow(i);
             i = i - 1;
         }
+        DT.setColumnCount(0);
     }
     
     //funcion que devuelve la fecha de hoy en string
@@ -304,6 +347,11 @@ public class abono extends javax.swing.JInternalFrame {
                 txtCantidadActionPerformed(evt);
             }
         });
+        txtCantidad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadKeyTyped(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel15.setText("telefono");
@@ -311,6 +359,11 @@ public class abono extends javax.swing.JInternalFrame {
         txtCelularCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCelularClienteActionPerformed(evt);
+            }
+        });
+        txtCelularCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCelularClienteKeyTyped(evt);
             }
         });
 
@@ -503,22 +556,27 @@ public class abono extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtCelularClienteActionPerformed
 
     private void RealizarAbonoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RealizarAbonoActionPerformed
-        // TODO add your handling code here:
-        String celular = txtCelularCliente.getText().toString();
-        String idClie=id_cliente(celular);
-        double adeuda = monto(idClie);
-        txtNombreCliente.setText(nom_cliente(celular));
-        if (adeuda==0){
-            JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
+        //validar si hay cantidad abonar y si hay cliente
+        String nombre = txtNombreCliente.getText();
+        String celular = txtCelularCliente.getText();
+        if (nombre.equals("") || celular.equals("")) {
+            JOptionPane.showMessageDialog(null, "no selecciono ningun cliente");
+        }else{
+            String idClie=id_cliente(celular);
+            double adeuda = monto(idClie);
+            txtNombreCliente.setText(nom_cliente(celular));
+            if (adeuda==0){
+                JOptionPane.showMessageDialog(null, "No adeuda nadaa...");
+            }
+            else{
+                insertar_abono();
+                JOptionPane.showMessageDialog(null, "Se genero Abono");
+                System.out.println("se cerro Abono");
+                //desconectar al salir
+                con.desconectar();
+                dispose();
+            }
         }
-        else{
-            insertar_abono();
-            JOptionPane.showMessageDialog(null, "Se genero Abono");
-            System.out.println("se cerro Abono");
-            con.desconectar();
-            dispose();
-        }
-        
         //JOptionPane.showMessageDialog(null, "si jalo el boton!!");
     }//GEN-LAST:event_RealizarAbonoActionPerformed
 
@@ -566,6 +624,7 @@ public class abono extends javax.swing.JInternalFrame {
         if ((nombreCliente.equals("")) && (numeroCliente.equals(""))) {
             JOptionPane.showMessageDialog(null, "ingresa al menos un campo a buscar");
         }else{
+            LimpiarTabla();
             listar();
             //seleccionar id de la tabla
             //int fila = buscaCliente.getSelectedRow();
@@ -582,11 +641,37 @@ public class abono extends javax.swing.JInternalFrame {
         String nom = tabla_clientes.getValueAt(fila, 2).toString();
         String dir = tabla_clientes.getValueAt(fila, 3).toString();
         int estado = Integer.parseInt(tabla_clientes.getValueAt(fila, 4).toString());
+        String adeudo = tabla_clientes.getValueAt(fila, 5).toString();
         
         
         txtCelularCliente.setText(dni);
         txtNombreCliente.setText(nom);
+        txtAdeudo.setText(adeudo);
     }//GEN-LAST:event_tabla_clientesMouseClicked
+
+    private void txtCelularClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCelularClienteKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtCelularClienteKeyTyped
+
+    private void txtCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadKeyTyped
+        // TODO add your handling code here:
+        char validar = evt.getKeyChar();
+        
+        if (Character.isLetter(validar)) {
+            getToolkit().beep();
+            evt.consume();
+            
+            JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
+        }
+    }//GEN-LAST:event_txtCantidadKeyTyped
     
     
 
