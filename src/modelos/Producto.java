@@ -345,7 +345,8 @@ public class Producto extends javax.swing.JInternalFrame {
             LimpiarTabla();
             jTable1.setModel(getDatos());
         } catch (SQLException ex) {
-            System.out.println("no elimina vendedor");
+            JOptionPane.showMessageDialog(null, "este producto esta registrado en ventas, ya que si se elimina se eliminara donde se vendio el producto");
+            System.out.println("no elimina producto");
         }
         limpia_crud();
         reiniciar_id();

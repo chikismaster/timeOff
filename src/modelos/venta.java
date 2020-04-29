@@ -689,6 +689,7 @@ public class venta extends javax.swing.JInternalFrame {
         txtProducto.setEditable(false);
         txtProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtProducto.setForeground(new java.awt.Color(0, 51, 255));
+        txtProducto.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         txtProducto.setCaretColor(new java.awt.Color(0, 51, 255));
         txtProducto.setDisabledTextColor(new java.awt.Color(0, 51, 204));
 
@@ -760,6 +761,7 @@ public class venta extends javax.swing.JInternalFrame {
         txtQuitar.setEditable(false);
         txtQuitar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtQuitar.setForeground(new java.awt.Color(0, 51, 255));
+        txtQuitar.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         txtQuitar.setCaretColor(new java.awt.Color(0, 51, 255));
         txtQuitar.setDisabledTextColor(new java.awt.Color(0, 51, 204));
         txtQuitar.addActionListener(new java.awt.event.ActionListener() {
@@ -1013,7 +1015,7 @@ public class venta extends javax.swing.JInternalFrame {
     
     //boton buscar producto por codigo de barras
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        LimpiarTabla();
+        //LimpiarTabla();
         int hay = 0;
         int g;
         String cod_pro = txtCodProd.getText().toString();
@@ -1035,7 +1037,7 @@ public class venta extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "Producto No registrado");
         }
         if (hay == 0) {
-            JOptionPane.showMessageDialog(this, "intenta otro");
+            JOptionPane.showMessageDialog(this, "Producto no registrado, ve a registrar o intenta otro");
             txtCodProd.setText("");
             /*g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
             if (g == 0) {
@@ -1056,6 +1058,9 @@ public class venta extends javax.swing.JInternalFrame {
         String producto_existe = txtProducto.getText();
         if (producto_existe.equals("")) {
             JOptionPane.showMessageDialog(null, "Seleccione producto");
+            //por si se quito la tabla de compra de producto (detalle de venta)
+            LimpiarTabla();
+            jTable1.setModel(getDatos3());
         }else{
             /*
             1.-limpiamos tablas
@@ -1098,6 +1103,9 @@ public class venta extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "No alcanzan los productos");
                 //limpiamos productos
                 limpiar_prod();
+                //por si se quito la tabla de compra de producto (detalle de venta)
+                LimpiarTabla();
+                jTable1.setModel(getDatos3());
             }
         }
     }//GEN-LAST:event_jButton3ActionPerformed

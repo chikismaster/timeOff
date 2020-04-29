@@ -23,13 +23,7 @@ public class conexion {
     private static final String password = "nOwtgWhZa16iA9deHx4D";
     private static final String url = "jdbc:mysql://b7sis9pkpmxjxql3njhz-mysql.services.clever-cloud.com/b7sis9pkpmxjxql3njhz";
     
-    /*
-    //conexion (production)
-    private static final String driver = "com.mysql.jdbc.Driver";
-    private static final String user = "uuc6elqju7u0iq0o";
-    private static final String password = "hPuIymXgRMwLmYAegfOv";
-    private static final String url = "jdbc:mysql://byfvfengnv3cazt9jxqy-mysql.services.clever-cloud.com/byfvfengnv3cazt9jxqy";
-    */
+    
     //bandera para la conexion
     public static boolean cam = false;
     
