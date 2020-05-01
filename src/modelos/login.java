@@ -1,12 +1,14 @@
 package modelos;
 
 import conexion.conexion;
+import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -28,6 +30,7 @@ public class login extends javax.swing.JFrame {
         txtNombre.setText("");
         txtcontra.setText("");
         //validar_conexion();
+        setIconImage(new ImageIcon(getClass().getResource("/imagenes/timeoffpng.png")).getImage());
     }
 
     @SuppressWarnings("unchecked")
