@@ -1036,7 +1036,7 @@ public class venta extends javax.swing.JInternalFrame {
             
             while (RS.next()) {                
                 txtProducto.setText(RS.getString(2));
-                txtPrecio.setText(RS.getString(3));
+                txtPrecio.setText("$"+RS.getString(3));
                 cant = Double.parseDouble(RS.getString(3));
                 txtStock.setText(RS.getString(4));
                 hay = hay+1;
@@ -1047,16 +1047,8 @@ public class venta extends javax.swing.JInternalFrame {
         if (hay == 0) {
             JOptionPane.showMessageDialog(this, "Producto no registrado, ve a registrar o intenta otro");
             txtCodProd.setText("");
-            /*g = JOptionPane.showConfirmDialog(this, "Producto No Registrado, Desea Reagistrar?");
-            if (g == 0) {
-                Producto pr = new Producto();
-                principal.VentanaPrincipal.add(pr);
-                pr.setVisible(true);
-                dispose();
-            }else{
-                JOptionPane.showMessageDialog(this, "intenta otro");
-                txtCodProd.setText("");
-            }*/
+            LimpiarTabla();
+            jTable1.setModel(getDatos3());
         }
         txtCantidad.setValue(1);
     }//GEN-LAST:event_jButton2ActionPerformed
