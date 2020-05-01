@@ -305,6 +305,7 @@ public class abono extends javax.swing.JInternalFrame {
         txtFecha.setEditable(false);
         txtFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtFecha.setForeground(new java.awt.Color(0, 51, 255));
+        txtFecha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtFecha.setCaretColor(new java.awt.Color(0, 51, 255));
         txtFecha.setDisabledTextColor(new java.awt.Color(0, 51, 204));
         txtFecha.addActionListener(new java.awt.event.ActionListener() {
@@ -322,7 +323,9 @@ public class abono extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                    .addComponent(txtFecha))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)))
                 .addContainerGap(238, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(

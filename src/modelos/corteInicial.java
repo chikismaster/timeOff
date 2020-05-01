@@ -317,22 +317,25 @@ public class corteInicial extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtFechaActionPerformed
 
     private void AceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AceptarActionPerformed
-        // TODO add your handling code here:
-        int est = estado_corte();
-        if(est==1){
-            JOptionPane.showMessageDialog(null, "Haga primero corte de caja para poder volver a hacer inicio de fondo");
-            System.out.println("se cerro corte inicial");
-            con.desconectar();
-            dispose();
+        //validar si esta vacio
+        if (txtCantidad.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "ingresa el dinero inicial o un cero si no hay");
+        }else{
+            int est = estado_corte();
+            if(est==1){
+                JOptionPane.showMessageDialog(null, "Haga primero corte de caja para poder volver a hacer inicio de fondo");
+                System.out.println("se cerro corte inicial");
+                con.desconectar();
+                dispose();
+            }
+            else{
+                insertar_fondo();
+                JOptionPane.showMessageDialog(null, "Se genero Corte Inicial");
+                System.out.println("se cerro corte inicial");
+                con.desconectar();
+                dispose();
+            }
         }
-        else{
-            insertar_fondo();
-            JOptionPane.showMessageDialog(null, "Se genero Corte Inicial");
-            System.out.println("se cerro corte inicial");
-            con.desconectar();
-            dispose();
-        }
-//JOptionPane.showMessageDialog(null, "si jalo el boton!!");
     }//GEN-LAST:event_AceptarActionPerformed
 
     private void txtVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVendedorActionPerformed

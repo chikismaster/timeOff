@@ -92,6 +92,7 @@ public class Cliente extends javax.swing.JInternalFrame {
         txtNom.setText("");
         txtDir.setText("");
         cboEstado.setSelectedIndex(0);
+        id_cliente = 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -357,22 +358,25 @@ public class Cliente extends javax.swing.JInternalFrame {
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         //seleccionar id de la tabla
-        int fila = tabla_clientes.getSelectedRow();
-        int id = Integer.parseInt(tabla_clientes.getValueAt(fila, 0).toString());
+        if (id_cliente == 0) {
+            JOptionPane.showMessageDialog(null, "No seleccionaste el cliente a eliminar");
+        }else{
+            String SQL_DELETE = "DELETE FROM cliente WHERE IdCliente="+id_cliente+"";
         
-        String SQL_DELETE = "DELETE FROM cliente WHERE IdCliente="+id+"";
-        
-        try {
-            ps = con.getConnection().prepareStatement(SQL_DELETE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            tabla_clientes.setModel(getDatos());
-        } catch (SQLException ex) {
-            System.out.println("no elimina vendedor");
+            try {
+                ps = con.getConnection().prepareStatement(SQL_DELETE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                tabla_clientes.setModel(getDatos());
+            } catch (SQLException ex) {
+                System.out.println("no elimina vendedor");
+            }
+            limpia_crud();
+            reiniciar_id();
         }
-        limpia_crud();
-        reiniciar_id();
+        
+        
         
     }//GEN-LAST:event_btnEliminarActionPerformed
 

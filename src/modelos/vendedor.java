@@ -114,6 +114,7 @@ public class vendedor extends javax.swing.JInternalFrame {
         txtTelefono.setText("");
         comboEstado.setSelectedIndex(0);
         txtusuario.setText("");
+        idvend="";
     }
     
     public void reiniciar_id(){
@@ -383,6 +384,7 @@ public class vendedor extends javax.swing.JInternalFrame {
                 int res = ps.executeUpdate();
                 if (res > 0) {
                     JOptionPane.showMessageDialog(null, "registro guardado");
+                    limpia_crud();
                 }else{
                     JOptionPane.showMessageDialog(null, "NO GUARDO!!");
                 }
@@ -393,13 +395,9 @@ public class vendedor extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "ERROR (usuario registrado cambie de usuario)");
             }
         }
-        //limpia_crud();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        //seleccionar id de la tabla
-        int fila = jTable1.getSelectedRow();
-        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
         //agregar datos
         String dni = txtDni.getText().toString();
         String nom = txtNombres.getText().toString();
@@ -410,7 +408,7 @@ public class vendedor extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Debe Ingresar todos los campos");
         }else{
             //consulta sql
-            String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+id+"";
+            String SQL_UPDATE ="UPDATE vendedor SET Dni='"+dni+"', Nombres='"+nom+"', Telefono = '"+tel+"', Estado = '"+estado+"', User = '"+usu+"' WHERE IdVendedor = "+idvend+"";
             //ejecutar consulta
             try {
                 ps = con.getConnection().prepareStatement(SQL_UPDATE);
@@ -421,7 +419,8 @@ public class vendedor extends javax.swing.JInternalFrame {
             } catch (SQLException e) {
                 System.out.println("no sirve la actualizar");
             }
-        }    
+        }
+        limpia_crud();
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed

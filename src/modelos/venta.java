@@ -689,13 +689,16 @@ public class venta extends javax.swing.JInternalFrame {
         txtProducto.setEditable(false);
         txtProducto.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtProducto.setForeground(new java.awt.Color(0, 51, 255));
-        txtProducto.setHorizontalAlignment(javax.swing.JTextField.TRAILING);
+        txtProducto.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         txtProducto.setCaretColor(new java.awt.Color(0, 51, 255));
         txtProducto.setDisabledTextColor(new java.awt.Color(0, 51, 204));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel10.setText("PRECIO");
 
+        txtPrecio.setEditable(false);
+        txtPrecio.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        txtPrecio.setForeground(new java.awt.Color(204, 0, 0));
         txtPrecio.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPrecioKeyTyped(evt);
@@ -829,13 +832,12 @@ public class venta extends javax.swing.JInternalFrame {
                                             .addComponent(jLabel7))
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtVendedor)
-                            .addComponent(txtStock)
-                            .addComponent(txtProducto)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+                            .addComponent(txtProducto, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtcliente, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txtVendedor)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -858,7 +860,7 @@ public class venta extends javax.swing.JInternalFrame {
                     .addComponent(txtCodCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBuscarCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtcliente, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
@@ -986,7 +988,7 @@ public class venta extends javax.swing.JInternalFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
         pack();
@@ -1192,6 +1194,7 @@ public class venta extends javax.swing.JInternalFrame {
             
             txtCodCliente.setText(dni);
             txtcliente.setText(nom);
+            nom_cliente = nom;
         //si es 7 es la tabla "venta"
         }else if(numcol == 7){
             /*

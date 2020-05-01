@@ -372,10 +372,10 @@ public class corteFinal extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(Generar, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Correcto, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(10, 10, 10)
+                                .addComponent(Generar)
+                                .addGap(11, 11, 11)
+                                .addComponent(Correcto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)
                                 .addComponent(Faltp, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(Sobro, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -403,16 +403,12 @@ public class corteFinal extends javax.swing.JInternalFrame {
                     .addComponent(jLabel18))
                 .addGap(11, 11, 11)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(Generar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Correcto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(Sobro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(Faltp, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())))
+                    .addComponent(Generar, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Correcto, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(Sobro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Faltp, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -596,37 +592,49 @@ public class corteFinal extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtInicialActionPerformed
 
     private void CorrectoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CorrectoActionPerformed
-        // TODO add your handling code here:
-        String estado="Correcto";
-        int id=id_corte();
-        System.out.println(id);
-        actualizar_estado(id,estado);
-        //cerrar session
-        System.out.println("se cerro crotefinal");
-        con.desconectar();
-        dispose();
+        //validamos si el boton no esta vacio
+        if (txtInicial.getText().equals("") || txtEfectivo.getText().equals("") || txtTarjeta.getText().equals("") || txtAbono.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Genera Corte primero...");
+        }else{
+            String estado="Correcto";
+            int id=id_corte();
+            System.out.println(id);
+            actualizar_estado(id,estado);
+            //cerrar session
+            System.out.println("se cerro crotefinal");
+            con.desconectar();
+            dispose();
+        }   
     }//GEN-LAST:event_CorrectoActionPerformed
 
     private void FaltpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FaltpActionPerformed
-        // TODO add your handling code here:
-        String estado="Falto";
-        int id=id_corte();
-        actualizar_estado(id,estado);
-        //cerrar session
-        System.out.println("se cerro crotefinal");
-        con.desconectar();
-        dispose();
+        //validamos si el boton no esta vacio
+        if (txtInicial.getText().equals("") || txtEfectivo.getText().equals("") || txtTarjeta.getText().equals("") || txtAbono.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Genera Corte primero...");
+        }else{
+            String estado="Falto";
+            int id=id_corte();
+            actualizar_estado(id,estado);
+            //cerrar session
+            System.out.println("se cerro crotefinal");
+            con.desconectar();
+            dispose();
+        }
     }//GEN-LAST:event_FaltpActionPerformed
 
     private void SobroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SobroActionPerformed
-        // TODO add your handling code here:
-        String estado="Sobro";
-        int id=id_corte();
-        actualizar_estado(id,estado);
-        //cerrar session
-        System.out.println("se cerro crotefinal");
-        con.desconectar();
-        dispose();
+        //validamos si el boton no esta vacio
+        if (txtInicial.getText().equals("") || txtEfectivo.getText().equals("") || txtTarjeta.getText().equals("") || txtAbono.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Genera Corte primero...");
+        }else{
+            String estado="Sobro";
+            int id=id_corte();
+            actualizar_estado(id,estado);
+            //cerrar session
+            System.out.println("se cerro crotefinal");
+            con.desconectar();
+            dispose(); 
+        }
     }//GEN-LAST:event_SobroActionPerformed
 
 

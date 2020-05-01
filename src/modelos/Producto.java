@@ -16,6 +16,10 @@ public class Producto extends javax.swing.JInternalFrame {
     private DefaultTableModel DT = new DefaultTableModel();
     private ResultSet RS;
     
+    //**************************varibles globales ******************************
+    //var global para guardar el id
+    private static int id = 0;
+    
     public Producto() {
         initComponents();
         ps = null;
@@ -87,6 +91,8 @@ public class Producto extends javax.swing.JInternalFrame {
         txtPrecio.setText("");
         txtPrecioCompra.setText("");
         txtStock.setText("");
+        
+        id = 0;
         
     }
 
@@ -201,15 +207,15 @@ public class Producto extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtStock)
-                    .addComponent(txtPrecioCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                    .addComponent(txtPrecioCompra, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
                     .addComponent(txtPrecio)
                     .addComponent(txtNombres)
                     .addComponent(txtcod_pro))
-                .addGap(10, 10, 10)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnModificar, javax.swing.GroupLayout.PREFERRED_SIZE, 112, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnEliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -268,7 +274,7 @@ public class Producto extends javax.swing.JInternalFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -300,20 +306,24 @@ public class Producto extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        String nom = txtNombres.getText().toString();
-        String cod_pro = txtcod_pro.getText().toString();
-        Double precio = Double.parseDouble(txtPrecio.getText().toString());
-        Double precio_compra = Double.parseDouble(txtPrecioCompra.getText().toString());
-        int stock = Integer.parseInt(txtStock.getText().toString());
-        
-        
-        String SQL_INSERT = "INSERT INTO producto(Nombres, Codigo_product, Precio, precio_compra, Stock) VALUES ('"+nom+"', '"+cod_pro+"', "+precio+", "+precio_compra+", '"+stock+"')";
-            
+        //definimos antes si esta vacio los textfield
+        if (txtNombres.getText().equals("") || txtcod_pro.getText().equals("") || txtPrecio.getText().equals("")|| txtPrecioCompra.getText().equals("")|| txtStock.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "llena todos los campos!!");
+        }else{
+            //variables a guardar
+            String nom = txtNombres.getText();
+            String cod_pro = txtcod_pro.getText();
+            Double precio = Double.parseDouble(txtPrecio.getText());
+            Double precio_compra = Double.parseDouble(txtPrecioCompra.getText());
+            int stock = Integer.parseInt(txtStock.getText());
+            //usamos la insercion en SQL
+            String SQL_INSERT = "INSERT INTO producto(Nombres, Codigo_product, Precio, precio_compra, Stock) VALUES ('"+nom+"', '"+cod_pro+"', "+precio+", "+precio_compra+", '"+stock+"')";
             try {
                 ps = con.getConnection().prepareStatement(SQL_INSERT);
                 int res = ps.executeUpdate();
                 if (res > 0) {
                     JOptionPane.showMessageDialog(null, "registro guardado");
+                    limpia_crud();
                 }else{
                     JOptionPane.showMessageDialog(null, "NO GUARDO!!");
                 }
@@ -323,53 +333,58 @@ public class Producto extends javax.swing.JInternalFrame {
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, "ERROR (usuario registrado cambie de usuario)");
             }
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
     //boton de modificar campo de la tabla productos
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        //seleccionar id de la tabla
-        int fila = jTable1.getSelectedRow();
-        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
-        //datos
-        String nom = txtNombres.getText().toString();
-        String cod_pro = txtcod_pro.getText().toString();
-        Double precio = Double.parseDouble(txtPrecio.getText().toString());
-        Double precio_compra = Double.parseDouble(txtPrecioCompra.getText().toString());
-        int stock = Integer.parseInt(txtStock.getText().toString());
         
-        
-        String SQL_UPDATE = "UPDATE producto SET Nombres='"+nom+"', Codigo_product='"+cod_pro+"', Precio="+precio+", precio_compra='"+precio_compra+"',Stock='"+stock+"' WHERE IdProducto="+id+"";
-        try {
-            ps = con.getConnection().prepareStatement(SQL_UPDATE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos());
-        } catch (SQLException e) {
-            System.out.println("no sirve la actualizar");
+        if (txtNombres.getText().equals("") || txtcod_pro.getText().equals("") || txtPrecio.getText().equals("")|| txtPrecioCompra.getText().equals("")|| txtStock.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "llena todos los campos!!");
+        }else{
+            //datos
+            String nom = txtNombres.getText().toString();
+            String cod_pro = txtcod_pro.getText().toString();
+            Double precio = Double.parseDouble(txtPrecio.getText().toString());
+            Double precio_compra = Double.parseDouble(txtPrecioCompra.getText().toString());
+            int stock = Integer.parseInt(txtStock.getText().toString());
+
+            String SQL_UPDATE = "UPDATE producto SET Nombres='"+nom+"', Codigo_product='"+cod_pro+"', Precio="+precio+", precio_compra='"+precio_compra+"',Stock='"+stock+"' WHERE IdProducto="+id+"";
+            try {
+                ps = con.getConnection().prepareStatement(SQL_UPDATE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos());
+                limpia_crud();
+            } catch (SQLException e) {
+                System.out.println("no sirve la actualizar");
+            } 
+            
         }
-        
     }//GEN-LAST:event_btnModificarActionPerformed
     //boton eliminar campo de la tabla porductos
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        int fila = jTable1.getSelectedRow();
-        int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
+        //validamos si selecciono algun producto para eliminar
+        if (id == 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona el producto a eliminar!");
+        }else{
+            String SQL_DELETE = "DELETE FROM producto WHERE IdProducto="+id+"";
         
-        String SQL_DELETE = "DELETE FROM producto WHERE IdProducto="+id+"";
-        
-        try {
-            ps = con.getConnection().prepareStatement(SQL_DELETE);
-            ps.execute();
-            //metodos para que se refresque la tabla
-            LimpiarTabla();
-            jTable1.setModel(getDatos());
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "este producto esta registrado en ventas, ya que si se elimina se eliminara donde se vendio el producto");
-            System.out.println("no elimina producto");
+            try {
+                ps = con.getConnection().prepareStatement(SQL_DELETE);
+                ps.execute();
+                //metodos para que se refresque la tabla
+                LimpiarTabla();
+                jTable1.setModel(getDatos());
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "este producto esta registrado en ventas, ya que si se elimina se eliminara donde se vendio el producto");
+                System.out.println("no elimina producto");
+            }
+            limpia_crud();
+            reiniciar_id();
         }
-        limpia_crud();
-        reiniciar_id();
     }//GEN-LAST:event_btnEliminarActionPerformed
-
+    //boton limpiar crud
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
         limpia_crud();
     }//GEN-LAST:event_btnNuevoActionPerformed
@@ -377,21 +392,21 @@ public class Producto extends javax.swing.JInternalFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int fila = jTable1.getSelectedRow();
         
-        String id = jTable1.getValueAt(fila, 0).toString();
+        String idd = jTable1.getValueAt(fila, 0).toString();
         String nom = jTable1.getValueAt(fila, 1).toString();
         String cod_pro = jTable1.getValueAt(fila, 2).toString();
         String precio = jTable1.getValueAt(fila, 3).toString();
         String precio_compra = jTable1.getValueAt(fila, 4).toString();
         String stock = jTable1.getValueAt(fila, 5).toString();
         
+        id  = Integer.parseInt(idd);
         txtNombres.setText(nom);
         txtcod_pro.setText(cod_pro);
         txtPrecio.setText(precio);
         txtPrecioCompra.setText(precio_compra);
-        txtStock.setText(stock);
-        
+        txtStock.setText(stock);    
     }//GEN-LAST:event_jTable1MouseClicked
-
+    //validar sean solo numero y no letras
     private void txtPrecioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioKeyTyped
         // TODO add your handling code here:
         char validar = evt.getKeyChar();
@@ -403,7 +418,7 @@ public class Producto extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
         }
     }//GEN-LAST:event_txtPrecioKeyTyped
-
+    //validar sean solo numero y no letras
     private void txtPrecioCompraKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPrecioCompraKeyTyped
         // TODO add your handling code here:
         char validar = evt.getKeyChar();
@@ -415,7 +430,7 @@ public class Producto extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(rootPane, "Ingresa solo numeros");
         }
     }//GEN-LAST:event_txtPrecioCompraKeyTyped
-
+    //validar sean solo numero y no letras
     private void txtStockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockKeyTyped
         // TODO add your handling code here:
         char validar = evt.getKeyChar();
